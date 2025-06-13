@@ -1,0 +1,53 @@
+.maindiv{
+    background-color: #dfe3e8;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.logincard{
+    height:70% ;
+    width: 30%;
+}
+
+.headingstack{
+    align-items: center;
+    padding: 5%;
+}
+
+.signinheading{
+    font-family: sans-serif;
+
+}
+
+.sigininform{
+    margin-top: 5%;
+    align-items: center;
+}
+
+.usernamefield{
+    width: 90%;
+}
+
+.loginbutton{
+    color: white;
+    background-color: #1976d2;
+    width: 20%;
+    height: 5vh;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.loginbutton:hover{
+    color: black;
+}
+
+.log{
+    align-items: center;
+    justify-content: center;
+}

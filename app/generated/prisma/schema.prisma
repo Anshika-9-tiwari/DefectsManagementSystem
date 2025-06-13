@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id       Int     @id @default(autoincrement())
+  name     String
+  username String  @unique
+  password String
+  role     String  @default("user")
+  email    String?
+}
+
+model entry {
+  id           Int      @id @default(autoincrement())
+  verifiername String
+  checkername  String
+  partnumber   String
+  defectstatus String
+  defect       String
+  datetime     DateTime @default(now())
+}
+
+model Part {
+  id                          Int    @id @default(autoincrement())
+  customer                    String
+  assyPartNo                  String
+  subAssyPartNo               String
+  qualityPlanAvailable        String
+  idA                         String
+  plugGaugeAvailableA         String
+  idB                         String
+  plugGaugeAvailableB         String
+  wallThicknessA              String
+  wallThicknessB              String
+  flareLengthMin              String
+  endCapLengthMin             String
+  profileFixtureAvailable     String
+  hardness                    String
+  hardnessPinGaugeAvailable   String
+  notchingRequired            String
+  notchingToolAvailable       String
+  connectorRequired           String
+  connectorFixtureAvailable   String
+  oetikerClampRequired        String
+  oetikerClampFixture         String
+  mubeaClamp                  String
+  mubeaClampFixture           String
+  springBandClamp             String
+  heatSinkSleeve              String
+  assyProfileFixtureAvailable String
+  leakageTestingRequired      String
+  leakageTestingPerformed     String
+  leakageFixtureAvailable     String
+  numLeakageFixtures          Int
+  cleanlinessMiliporeTest     String
+  burstReqAvailable           String
+  pullOutLoad                 String
+  vacuumTestingRequired       String
+  vacuumTestingPerformed      String
+  padPrintingFixture          String
+  column                      String @default(" ")
+}
+
+model Defects {
+  id         Int    @id @default(autoincrement())
+  defectcode String
+  defect     String
+}
