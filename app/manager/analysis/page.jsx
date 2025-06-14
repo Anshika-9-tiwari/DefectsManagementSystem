@@ -121,7 +121,7 @@ export default function SelectionPanel() {
           width: '100%',
           padding: 3,
           backgroundColor: '#f9f9f9',
-          boxShadow: 6, // stronger base shadow
+          boxShadow: 6, 
           borderRadius: 3,
         }}
       >
@@ -142,7 +142,7 @@ export default function SelectionPanel() {
               border:'1px solid #100F33',
               '&:hover': {
                 backgroundColor: '#e3f2fd',
-                boxShadow: '0 6px 20px #100F33', // more shadow on hover
+                boxShadow: '0 6px 20px #100F33', 
                 transform: 'translateY(-3px)', // lift effect
               },
             }}
@@ -251,7 +251,6 @@ export default function SelectionPanel() {
                       backgroundColor: '#100F33',
                       '& input': {
                         color: 'white',
-                        // This is the actual calendar icon
                         '&::-webkit-calendar-picker-indicator': {
                           filter: 'invert(1)',
                         },
@@ -307,7 +306,6 @@ export default function SelectionPanel() {
                       backgroundColor: '#100F33',
                       '& input': {
                         color: 'white',
-                        // This is the actual calendar icon
                         '&::-webkit-calendar-picker-indicator': {
                           filter: 'invert(1)',
                         },
