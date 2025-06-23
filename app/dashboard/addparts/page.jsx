@@ -27,7 +27,8 @@ export default function AddPartsPage() {
     'heatSinkSleeve', 'assyProfileFixtureAvailable', 'leakageTestingRequired',
     'leakageTestingPerformed', 'leakageFixtureAvailable', 'numLeakageFixtures',
     'cleanlinessMiliporeTest', 'burstReqAvailable', 'pullOutLoad',
-    'vacuumTestingRequired', 'vacuumTestingPerformed', 'padPrintingFixture'
+    'vacuumTestingRequired', 'vacuumTestingPerformed', 'padPrintingFixture',
+    'inspectionModule', 'itemCode'
   ];
 
   const handleChange = (e) => {

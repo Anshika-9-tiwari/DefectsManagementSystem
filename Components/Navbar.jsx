@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { signOut } from 'next-auth/react';
 import Image from 'next/image';
@@ -25,7 +24,7 @@ export default function ButtonAppBar() {
                 )}
 
                 {/* Logo */}
-                <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start' }}>
+                <Box sx={{ marginLeft:'2em',flexGrow: 1, display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start' }}>
                     <Image
                         src="/Velocity-ALogo2.png"
                         alt="Velocity Logo"

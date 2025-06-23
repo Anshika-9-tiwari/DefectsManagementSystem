@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Modal, Box, Typography, TextField, Button, Stack } from '@mui/material';
+import { Modal, Box, Typography, TextField, Button, Stack, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const style = {
   position: 'absolute',
@@ -47,7 +47,21 @@ export default function AddUserModal({ open, handleClose, onAddUser }) {
           <TextField label="Username" name="username" value={formData.username} onChange={handleChange} fullWidth />
           <TextField label="Password" name="password" type="password" value={formData.password} onChange={handleChange} fullWidth />
           <TextField label="Email" name="email" value={formData.email} onChange={handleChange} fullWidth />
-          <TextField label="Role" name="role" value={formData.role} onChange={handleChange} fullWidth />
+                    <FormControl fullWidth>
+            <InputLabel id="role-select-label">Role</InputLabel>
+            <Select
+              labelId="role-select-label"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              label="Role"
+            >
+              <MenuItem value="user">user</MenuItem>
+              <MenuItem value="admin">admin</MenuItem>
+              <MenuItem value="manager">manager</MenuItem>
+              <MenuItem value="supervisor">supervisor</MenuItem>
+            </Select>
+          </FormControl>
           <Button variant="contained" onClick={handleSubmit}>Add User</Button>
         </Stack>
       </Box>

@@ -2210,7 +2210,6 @@ export namespace Prisma {
     checkername: string | null
     partnumber: string | null
     defectstatus: string | null
-    defect: string | null
     datetime: Date | null
   }
 
@@ -2220,7 +2219,6 @@ export namespace Prisma {
     checkername: string | null
     partnumber: string | null
     defectstatus: string | null
-    defect: string | null
     datetime: Date | null
   }
 
@@ -2250,7 +2248,6 @@ export namespace Prisma {
     checkername?: true
     partnumber?: true
     defectstatus?: true
-    defect?: true
     datetime?: true
   }
 
@@ -2260,7 +2257,6 @@ export namespace Prisma {
     checkername?: true
     partnumber?: true
     defectstatus?: true
-    defect?: true
     datetime?: true
   }
 
@@ -2367,7 +2363,7 @@ export namespace Prisma {
     checkername: string
     partnumber: string
     defectstatus: string
-    defect: string
+    defect: string[]
     datetime: Date
     _count: EntryCountAggregateOutputType | null
     _avg: EntryAvgAggregateOutputType | null
@@ -2441,7 +2437,7 @@ export namespace Prisma {
       checkername: string
       partnumber: string
       defectstatus: string
-      defect: string
+      defect: string[]
       datetime: Date
     }, ExtArgs["result"]["entry"]>
     composites: {}
@@ -2871,7 +2867,7 @@ export namespace Prisma {
     readonly checkername: FieldRef<"entry", 'String'>
     readonly partnumber: FieldRef<"entry", 'String'>
     readonly defectstatus: FieldRef<"entry", 'String'>
-    readonly defect: FieldRef<"entry", 'String'>
+    readonly defect: FieldRef<"entry", 'String[]'>
     readonly datetime: FieldRef<"entry", 'DateTime'>
   }
     
@@ -3299,6 +3295,8 @@ export namespace Prisma {
     vacuumTestingRequired: string | null
     vacuumTestingPerformed: string | null
     padPrintingFixture: string | null
+    inspectionModule: string | null
+    itemCode: string | null
     column: string | null
   }
 
@@ -3340,6 +3338,8 @@ export namespace Prisma {
     vacuumTestingRequired: string | null
     vacuumTestingPerformed: string | null
     padPrintingFixture: string | null
+    inspectionModule: string | null
+    itemCode: string | null
     column: string | null
   }
 
@@ -3381,6 +3381,8 @@ export namespace Prisma {
     vacuumTestingRequired: number
     vacuumTestingPerformed: number
     padPrintingFixture: number
+    inspectionModule: number
+    itemCode: number
     column: number
     _all: number
   }
@@ -3434,6 +3436,8 @@ export namespace Prisma {
     vacuumTestingRequired?: true
     vacuumTestingPerformed?: true
     padPrintingFixture?: true
+    inspectionModule?: true
+    itemCode?: true
     column?: true
   }
 
@@ -3475,6 +3479,8 @@ export namespace Prisma {
     vacuumTestingRequired?: true
     vacuumTestingPerformed?: true
     padPrintingFixture?: true
+    inspectionModule?: true
+    itemCode?: true
     column?: true
   }
 
@@ -3516,6 +3522,8 @@ export namespace Prisma {
     vacuumTestingRequired?: true
     vacuumTestingPerformed?: true
     padPrintingFixture?: true
+    inspectionModule?: true
+    itemCode?: true
     column?: true
     _all?: true
   }
@@ -3644,6 +3652,8 @@ export namespace Prisma {
     vacuumTestingRequired: string
     vacuumTestingPerformed: string
     padPrintingFixture: string
+    inspectionModule: string
+    itemCode: string
     column: string
     _count: PartCountAggregateOutputType | null
     _avg: PartAvgAggregateOutputType | null
@@ -3704,6 +3714,8 @@ export namespace Prisma {
     vacuumTestingRequired?: boolean
     vacuumTestingPerformed?: boolean
     padPrintingFixture?: boolean
+    inspectionModule?: boolean
+    itemCode?: boolean
     column?: boolean
   }, ExtArgs["result"]["part"]>
 
@@ -3745,6 +3757,8 @@ export namespace Prisma {
     vacuumTestingRequired?: boolean
     vacuumTestingPerformed?: boolean
     padPrintingFixture?: boolean
+    inspectionModule?: boolean
+    itemCode?: boolean
     column?: boolean
   }, ExtArgs["result"]["part"]>
 
@@ -3786,6 +3800,8 @@ export namespace Prisma {
     vacuumTestingRequired?: boolean
     vacuumTestingPerformed?: boolean
     padPrintingFixture?: boolean
+    inspectionModule?: boolean
+    itemCode?: boolean
     column?: boolean
   }, ExtArgs["result"]["part"]>
 
@@ -3827,10 +3843,12 @@ export namespace Prisma {
     vacuumTestingRequired?: boolean
     vacuumTestingPerformed?: boolean
     padPrintingFixture?: boolean
+    inspectionModule?: boolean
+    itemCode?: boolean
     column?: boolean
   }
 
-  export type PartOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "customer" | "assyPartNo" | "subAssyPartNo" | "qualityPlanAvailable" | "idA" | "plugGaugeAvailableA" | "idB" | "plugGaugeAvailableB" | "wallThicknessA" | "wallThicknessB" | "flareLengthMin" | "endCapLengthMin" | "profileFixtureAvailable" | "hardness" | "hardnessPinGaugeAvailable" | "notchingRequired" | "notchingToolAvailable" | "connectorRequired" | "connectorFixtureAvailable" | "oetikerClampRequired" | "oetikerClampFixture" | "mubeaClamp" | "mubeaClampFixture" | "springBandClamp" | "heatSinkSleeve" | "assyProfileFixtureAvailable" | "leakageTestingRequired" | "leakageTestingPerformed" | "leakageFixtureAvailable" | "numLeakageFixtures" | "cleanlinessMiliporeTest" | "burstReqAvailable" | "pullOutLoad" | "vacuumTestingRequired" | "vacuumTestingPerformed" | "padPrintingFixture" | "column", ExtArgs["result"]["part"]>
+  export type PartOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "customer" | "assyPartNo" | "subAssyPartNo" | "qualityPlanAvailable" | "idA" | "plugGaugeAvailableA" | "idB" | "plugGaugeAvailableB" | "wallThicknessA" | "wallThicknessB" | "flareLengthMin" | "endCapLengthMin" | "profileFixtureAvailable" | "hardness" | "hardnessPinGaugeAvailable" | "notchingRequired" | "notchingToolAvailable" | "connectorRequired" | "connectorFixtureAvailable" | "oetikerClampRequired" | "oetikerClampFixture" | "mubeaClamp" | "mubeaClampFixture" | "springBandClamp" | "heatSinkSleeve" | "assyProfileFixtureAvailable" | "leakageTestingRequired" | "leakageTestingPerformed" | "leakageFixtureAvailable" | "numLeakageFixtures" | "cleanlinessMiliporeTest" | "burstReqAvailable" | "pullOutLoad" | "vacuumTestingRequired" | "vacuumTestingPerformed" | "padPrintingFixture" | "inspectionModule" | "itemCode" | "column", ExtArgs["result"]["part"]>
 
   export type $PartPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Part"
@@ -3873,6 +3891,8 @@ export namespace Prisma {
       vacuumTestingRequired: string
       vacuumTestingPerformed: string
       padPrintingFixture: string
+      inspectionModule: string
+      itemCode: string
       column: string
     }, ExtArgs["result"]["part"]>
     composites: {}
@@ -4334,6 +4354,8 @@ export namespace Prisma {
     readonly vacuumTestingRequired: FieldRef<"Part", 'String'>
     readonly vacuumTestingPerformed: FieldRef<"Part", 'String'>
     readonly padPrintingFixture: FieldRef<"Part", 'String'>
+    readonly inspectionModule: FieldRef<"Part", 'String'>
+    readonly itemCode: FieldRef<"Part", 'String'>
     readonly column: FieldRef<"Part", 'String'>
   }
     
@@ -5781,6 +5803,8 @@ export namespace Prisma {
     vacuumTestingRequired: 'vacuumTestingRequired',
     vacuumTestingPerformed: 'vacuumTestingPerformed',
     padPrintingFixture: 'padPrintingFixture',
+    inspectionModule: 'inspectionModule',
+    itemCode: 'itemCode',
     column: 'column'
   };
 
@@ -5952,7 +5976,7 @@ export namespace Prisma {
     checkername?: StringFilter<"entry"> | string
     partnumber?: StringFilter<"entry"> | string
     defectstatus?: StringFilter<"entry"> | string
-    defect?: StringFilter<"entry"> | string
+    defect?: StringNullableListFilter<"entry">
     datetime?: DateTimeFilter<"entry"> | Date | string
   }
 
@@ -5975,7 +5999,7 @@ export namespace Prisma {
     checkername?: StringFilter<"entry"> | string
     partnumber?: StringFilter<"entry"> | string
     defectstatus?: StringFilter<"entry"> | string
-    defect?: StringFilter<"entry"> | string
+    defect?: StringNullableListFilter<"entry">
     datetime?: DateTimeFilter<"entry"> | Date | string
   }, "id">
 
@@ -6003,7 +6027,7 @@ export namespace Prisma {
     checkername?: StringWithAggregatesFilter<"entry"> | string
     partnumber?: StringWithAggregatesFilter<"entry"> | string
     defectstatus?: StringWithAggregatesFilter<"entry"> | string
-    defect?: StringWithAggregatesFilter<"entry"> | string
+    defect?: StringNullableListFilter<"entry">
     datetime?: DateTimeWithAggregatesFilter<"entry"> | Date | string
   }
 
@@ -6048,6 +6072,8 @@ export namespace Prisma {
     vacuumTestingRequired?: StringFilter<"Part"> | string
     vacuumTestingPerformed?: StringFilter<"Part"> | string
     padPrintingFixture?: StringFilter<"Part"> | string
+    inspectionModule?: StringFilter<"Part"> | string
+    itemCode?: StringFilter<"Part"> | string
     column?: StringFilter<"Part"> | string
   }
 
@@ -6089,6 +6115,8 @@ export namespace Prisma {
     vacuumTestingRequired?: SortOrder
     vacuumTestingPerformed?: SortOrder
     padPrintingFixture?: SortOrder
+    inspectionModule?: SortOrder
+    itemCode?: SortOrder
     column?: SortOrder
   }
 
@@ -6133,6 +6161,8 @@ export namespace Prisma {
     vacuumTestingRequired?: StringFilter<"Part"> | string
     vacuumTestingPerformed?: StringFilter<"Part"> | string
     padPrintingFixture?: StringFilter<"Part"> | string
+    inspectionModule?: StringFilter<"Part"> | string
+    itemCode?: StringFilter<"Part"> | string
     column?: StringFilter<"Part"> | string
   }, "id">
 
@@ -6174,6 +6204,8 @@ export namespace Prisma {
     vacuumTestingRequired?: SortOrder
     vacuumTestingPerformed?: SortOrder
     padPrintingFixture?: SortOrder
+    inspectionModule?: SortOrder
+    itemCode?: SortOrder
     column?: SortOrder
     _count?: PartCountOrderByAggregateInput
     _avg?: PartAvgOrderByAggregateInput
@@ -6223,6 +6255,8 @@ export namespace Prisma {
     vacuumTestingRequired?: StringWithAggregatesFilter<"Part"> | string
     vacuumTestingPerformed?: StringWithAggregatesFilter<"Part"> | string
     padPrintingFixture?: StringWithAggregatesFilter<"Part"> | string
+    inspectionModule?: StringWithAggregatesFilter<"Part"> | string
+    itemCode?: StringWithAggregatesFilter<"Part"> | string
     column?: StringWithAggregatesFilter<"Part"> | string
   }
 
@@ -6335,7 +6369,7 @@ export namespace Prisma {
     checkername: string
     partnumber: string
     defectstatus: string
-    defect: string
+    defect?: entryCreatedefectInput | string[]
     datetime?: Date | string
   }
 
@@ -6345,7 +6379,7 @@ export namespace Prisma {
     checkername: string
     partnumber: string
     defectstatus: string
-    defect: string
+    defect?: entryCreatedefectInput | string[]
     datetime?: Date | string
   }
 
@@ -6354,7 +6388,7 @@ export namespace Prisma {
     checkername?: StringFieldUpdateOperationsInput | string
     partnumber?: StringFieldUpdateOperationsInput | string
     defectstatus?: StringFieldUpdateOperationsInput | string
-    defect?: StringFieldUpdateOperationsInput | string
+    defect?: entryUpdatedefectInput | string[]
     datetime?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -6364,7 +6398,7 @@ export namespace Prisma {
     checkername?: StringFieldUpdateOperationsInput | string
     partnumber?: StringFieldUpdateOperationsInput | string
     defectstatus?: StringFieldUpdateOperationsInput | string
-    defect?: StringFieldUpdateOperationsInput | string
+    defect?: entryUpdatedefectInput | string[]
     datetime?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -6374,7 +6408,7 @@ export namespace Prisma {
     checkername: string
     partnumber: string
     defectstatus: string
-    defect: string
+    defect?: entryCreatedefectInput | string[]
     datetime?: Date | string
   }
 
@@ -6383,7 +6417,7 @@ export namespace Prisma {
     checkername?: StringFieldUpdateOperationsInput | string
     partnumber?: StringFieldUpdateOperationsInput | string
     defectstatus?: StringFieldUpdateOperationsInput | string
-    defect?: StringFieldUpdateOperationsInput | string
+    defect?: entryUpdatedefectInput | string[]
     datetime?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -6393,7 +6427,7 @@ export namespace Prisma {
     checkername?: StringFieldUpdateOperationsInput | string
     partnumber?: StringFieldUpdateOperationsInput | string
     defectstatus?: StringFieldUpdateOperationsInput | string
-    defect?: StringFieldUpdateOperationsInput | string
+    defect?: entryUpdatedefectInput | string[]
     datetime?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -6434,6 +6468,8 @@ export namespace Prisma {
     vacuumTestingRequired: string
     vacuumTestingPerformed: string
     padPrintingFixture: string
+    inspectionModule?: string
+    itemCode?: string
     column?: string
   }
 
@@ -6475,6 +6511,8 @@ export namespace Prisma {
     vacuumTestingRequired: string
     vacuumTestingPerformed: string
     padPrintingFixture: string
+    inspectionModule?: string
+    itemCode?: string
     column?: string
   }
 
@@ -6515,6 +6553,8 @@ export namespace Prisma {
     vacuumTestingRequired?: StringFieldUpdateOperationsInput | string
     vacuumTestingPerformed?: StringFieldUpdateOperationsInput | string
     padPrintingFixture?: StringFieldUpdateOperationsInput | string
+    inspectionModule?: StringFieldUpdateOperationsInput | string
+    itemCode?: StringFieldUpdateOperationsInput | string
     column?: StringFieldUpdateOperationsInput | string
   }
 
@@ -6556,6 +6596,8 @@ export namespace Prisma {
     vacuumTestingRequired?: StringFieldUpdateOperationsInput | string
     vacuumTestingPerformed?: StringFieldUpdateOperationsInput | string
     padPrintingFixture?: StringFieldUpdateOperationsInput | string
+    inspectionModule?: StringFieldUpdateOperationsInput | string
+    itemCode?: StringFieldUpdateOperationsInput | string
     column?: StringFieldUpdateOperationsInput | string
   }
 
@@ -6597,6 +6639,8 @@ export namespace Prisma {
     vacuumTestingRequired: string
     vacuumTestingPerformed: string
     padPrintingFixture: string
+    inspectionModule?: string
+    itemCode?: string
     column?: string
   }
 
@@ -6637,6 +6681,8 @@ export namespace Prisma {
     vacuumTestingRequired?: StringFieldUpdateOperationsInput | string
     vacuumTestingPerformed?: StringFieldUpdateOperationsInput | string
     padPrintingFixture?: StringFieldUpdateOperationsInput | string
+    inspectionModule?: StringFieldUpdateOperationsInput | string
+    itemCode?: StringFieldUpdateOperationsInput | string
     column?: StringFieldUpdateOperationsInput | string
   }
 
@@ -6678,6 +6724,8 @@ export namespace Prisma {
     vacuumTestingRequired?: StringFieldUpdateOperationsInput | string
     vacuumTestingPerformed?: StringFieldUpdateOperationsInput | string
     padPrintingFixture?: StringFieldUpdateOperationsInput | string
+    inspectionModule?: StringFieldUpdateOperationsInput | string
+    itemCode?: StringFieldUpdateOperationsInput | string
     column?: StringFieldUpdateOperationsInput | string
   }
 
@@ -6853,6 +6901,14 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -6884,7 +6940,6 @@ export namespace Prisma {
     checkername?: SortOrder
     partnumber?: SortOrder
     defectstatus?: SortOrder
-    defect?: SortOrder
     datetime?: SortOrder
   }
 
@@ -6894,7 +6949,6 @@ export namespace Prisma {
     checkername?: SortOrder
     partnumber?: SortOrder
     defectstatus?: SortOrder
-    defect?: SortOrder
     datetime?: SortOrder
   }
 
@@ -6954,6 +7008,8 @@ export namespace Prisma {
     vacuumTestingRequired?: SortOrder
     vacuumTestingPerformed?: SortOrder
     padPrintingFixture?: SortOrder
+    inspectionModule?: SortOrder
+    itemCode?: SortOrder
     column?: SortOrder
   }
 
@@ -7000,6 +7056,8 @@ export namespace Prisma {
     vacuumTestingRequired?: SortOrder
     vacuumTestingPerformed?: SortOrder
     padPrintingFixture?: SortOrder
+    inspectionModule?: SortOrder
+    itemCode?: SortOrder
     column?: SortOrder
   }
 
@@ -7041,6 +7099,8 @@ export namespace Prisma {
     vacuumTestingRequired?: SortOrder
     vacuumTestingPerformed?: SortOrder
     padPrintingFixture?: SortOrder
+    inspectionModule?: SortOrder
+    itemCode?: SortOrder
     column?: SortOrder
   }
 
@@ -7089,6 +7149,15 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type entryCreatedefectInput = {
+    set: string[]
+  }
+
+  export type entryUpdatedefectInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type DateTimeFieldUpdateOperationsInput = {

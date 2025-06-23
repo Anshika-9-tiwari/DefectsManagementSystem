@@ -50,8 +50,8 @@ export const authOptions = {
                 token.role = user.role;
             }
             return token;
-        }
-    },
+        },
+    
 
     async session({session, token}){
         if (token){
@@ -61,6 +61,8 @@ export const authOptions = {
         return session
 
     },
+
+},
 
     secret: process.env.NEXTAUTH_SECRET,
 

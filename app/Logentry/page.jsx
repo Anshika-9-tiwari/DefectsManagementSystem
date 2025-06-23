@@ -33,7 +33,15 @@ export default function Home() {
             try {
                 const res = await fetch('/api/dashboard/parts');
                 const data = await res.json();
-                setParts(data); // store fetched parts
+                console.log('Fetched parts data:', data); // Log the response
+
+                // Ensure data is an array
+                if (Array.isArray(data)) {
+                    setParts(data); // store fetched parts
+                } else {
+                    console.error('Fetched data is not an array:', data);
+                    setParts([]); // Reset to an empty array if not valid
+                }
             } catch (err) {
                 console.error('Failed to fetch parts', err);
             }
@@ -41,7 +49,7 @@ export default function Home() {
 
         const fetchnames = async () => {
             try {
-                const res = await fetch('/api/dashboard/users');
+                const res = await fetch('/api/logentry');
                 const names = await res.json();
                 setnames(names);
             } catch (err) {
@@ -137,7 +145,7 @@ export default function Home() {
                                     onChange={(e) => setpartnum(e.target.value)}
                                     label="Part Number"
                                 >
-                                    {parts.map((part) => (
+                                    {Array.isArray(parts) && parts.map((part) => (
                                         <MenuItem
                                             key={part.id}
                                             value={part.assyPartNo}
@@ -163,4 +171,3 @@ export default function Home() {
         </Container>
     );
 }
-

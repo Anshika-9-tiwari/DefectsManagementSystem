@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from 'react';
+import useDefectStore from '../../store/useDefectstore.js';
+import React, { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -21,9 +22,9 @@ import {
 } from '@mui/material';
 
 export default function Defectcheck() {
-  const [okQuantity, setOkQuantity] = useState(0);
-  const [totalChecked, setTotalChecked] = useState(0);
-  const [defectedQuantity, setDefectedQuantity] = useState(0);
+  // const [okQuantity, setOkQuantity] = useState(0);
+  // const [totalChecked, setTotalChecked] = useState(0);
+  // const [defectedQuantity, setDefectedQuantity] = useState(0);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -31,14 +32,34 @@ export default function Defectcheck() {
   const checkername = searchParams.get('checkername');
   const partnumber = searchParams.get('partnumber');
 
+  const cancel = searchParams.get('cancel');
+
+    const {
+    okQuantity,
+    defectedQuantity,
+    totalChecked,
+    incrementOk,
+    incrementDefected,
+    incrementTotal,
+    decrementDefected,
+    decrementTotal,
+  } = useDefectStore();
+
+  // useEffect(() => {
+  //   if (cancel === 'true') {
+  //     decrementTotal();
+  //     decrementDefected();
+  //   }
+  // }, [cancel]);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md')); 
 
   const handleYes = (e) => {
     e.preventDefault();
-    setTotalChecked((prev) => prev + 1);
-    setDefectedQuantity((prev) => prev + 1);
+    incrementDefected();
+    incrementTotal();
     router.push(
       `/defect-type?verifiername=${encodeURIComponent(verifiername)}&checkername=${encodeURIComponent(
         checkername,
@@ -48,15 +69,15 @@ export default function Defectcheck() {
 
   async function handleNo(e) {
     e.preventDefault();
-    setOkQuantity((prev) => prev + 1);
-    setTotalChecked((prev) => prev + 1);
+    incrementOk();
+    incrementTotal();
 
     const defectData = {
       verifiername,
       checkername,
       partnumber,
       defectstatus: 'ok',
-      defect: 'None',
+      defect: ["None"],
     };
 
     try {
@@ -224,5 +245,3 @@ export default function Defectcheck() {
     </Box>
   );
 }
-
-

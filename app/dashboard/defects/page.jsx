@@ -92,6 +92,7 @@ export default function Defects() {
                                             sx={{
                                                 textTransform: 'none',
                                                 color: 'red',
+                                                boxShadow:'1',
                                                 '&:hover': {
                                                     color: '#28D7EB',
                                                     backgroundColor: 'transparent',

@@ -32,7 +32,17 @@ export default function Parts() {
     const fetchParts = async () => {
       try {
         const res = await fetch("/api/dashboard/parts");
+        if (!res.ok) {
+        const errorData = await res.json();
+        console.error("Failed to fetch parts:", errorData?.error || res.status);
+        return;
+      }
         const data = await res.json();
+        if (!Array.isArray(data)) {
+        console.error("Expected an array but got:", data);
+        return;
+      }
+
         setParts(data);
       } catch (error) {
         console.error("Failed to fetch parts:", error);
@@ -62,7 +72,7 @@ export default function Parts() {
   return (
     <Box
       sx={{
-        margin: "2% 3%",
+        margin: "2% 2%",
         padding: 2,
         bgcolor: "#f9fafb",
         borderRadius: 2,
@@ -159,7 +169,7 @@ export default function Parts() {
                   borderBottom: `2px solid ${theme.palette.divider}`,
                 }}
               >
-                <TableCell />
+                <TableCell/>
                 <TableCell sx={{ width: 40 }}>Sno.</TableCell>
                 <TableCell>Customer</TableCell>
                 <TableCell>Assy part no.</TableCell>
@@ -219,9 +229,10 @@ export default function Parts() {
                       color="error"
                       sx={{
                         textTransform: "none",
-                        minWidth: 64,
+                        minWidth: 67,
                         fontWeight: 600,
-                        p: 0,
+                        p: 0.2,
+                        boxShadow:'1',
                         "&:hover": {
                           backgroundColor: "transparent",
                           color: theme.palette.primary.main,
@@ -309,5 +320,3 @@ export default function Parts() {
     </Box>
   );
 }
-
-  

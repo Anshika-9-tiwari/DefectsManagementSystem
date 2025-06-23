@@ -20,17 +20,20 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ReportIcon from '@mui/icons-material/Report';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import TocIcon from '@mui/icons-material/Toc';
+import StorageIcon from '@mui/icons-material/Storage';
+import Image from 'next/image';
 
 const drawerWidth = 240;
 
 const menuItems = [
   { text: 'Data Analysis', href: '/manager/analysis', icon: <AnalyticsIcon/> },
-  { text: 'Data Records', href: '/manager/data-record', icon: <TocIcon/> },
+  { text: 'Data Summary', href: '/manager/data-record', icon: <TocIcon/> },
+  { text: 'Data Logs', href: '/manager/data-logs', icon: <StorageIcon/> },
 ];
 
 export default function ManagerLayout({ children }) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const toggleDrawer = () => {
     setOpen((prev) => !prev);
@@ -42,6 +45,16 @@ export default function ManagerLayout({ children }) {
         <IconButton onClick={toggleDrawer} sx={{ color: 'white' }}>
           <ChevronLeftIcon />
         </IconButton>
+        <Box sx={{display: 'flex',  }}>
+          <Image
+              src="/Velocity-ALogo2.png"
+              alt="Velocity Logo"
+              width={180}
+              height={40}
+              style={{ objectFit: 'contain' }}
+              priority
+          />
+        </Box>
       </Toolbar>
 
       <Stack
@@ -100,7 +113,7 @@ export default function ManagerLayout({ children }) {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          display: open ? 'block' : 'none', // 👈 hide the drawer entirely when closed
+          display: open ? 'block' : 'none', 
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: 'border-box',
@@ -117,7 +130,7 @@ export default function ManagerLayout({ children }) {
         sx={{
           flexGrow: 1,
           bgcolor: 'background.default',
-          ml: open ? `5%` : '0%', // ← only if you're toggling
+          ml: open ? `0%` : '0%', // ← only if you're toggling
           transition: 'margin 0.3s ease',
           width: open ? `calc(100% - ${drawerWidth}px)` : '100%'
         }}

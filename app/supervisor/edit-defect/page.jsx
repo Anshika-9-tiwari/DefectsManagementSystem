@@ -3,7 +3,6 @@ import { Box, Card, Stack, Table, TableCell, TableRow, Paper, TableBody, TableCo
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import useDefectStore from '../../store/useDefectstore';
 
 export default function Defecttype() {
   const [defects, setDefects] = useState([]);
@@ -11,11 +10,10 @@ export default function Defecttype() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  const id = searchParams.get('id');
   const verifiername = searchParams.get('verifiername');
   const checkername = searchParams.get('checkername');
   const partnumber = searchParams.get('partnumber');
-
-  const { incrementTotal, incrementDefected, decrementDefected, decrementTotal } = useDefectStore();
 
   useEffect(() => {
     const fetchDefects = async () => {
@@ -29,6 +27,22 @@ export default function Defecttype() {
     };
     fetchDefects();
   }, []);
+
+    useEffect(() => {
+    const fetchCurrentEntry = async () => {
+      try {
+        const res = await fetch(`/api/supervisor/entry/${id}`);
+        const data = await res.json();
+        if (data && Array.isArray(data.defect)) {
+          setSelectedDefects(data.defect);
+        }
+      } catch (error) {
+        console.error('Failed to fetch current entry:', error);
+      }
+    };
+
+    if (id) fetchCurrentEntry();
+  }, [id]);
 
   const handleCheckboxChange = (defectLabel) => {
     setSelectedDefects((prev) =>
@@ -45,21 +59,18 @@ export default function Defecttype() {
 
 
     const entryData = {
-      verifiername,
-      checkername,
-      partnumber,
-      defectstatus: "defect",
-      defect: selectedDefects,
+        id, 
+        defect: selectedDefects,
     };
 
     try {
-      const res = await fetch('/api/user/defect-check', {
+      const res = await fetch('/api/supervisor/update-defect', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(entryData)
       });
       if (res.ok) {
-        router.push('/defect-check?verifiername=' + verifiername + '&checkername=' + checkername + '&partnumber=' + partnumber);
+        router.push('/supervisor/operator-entries');
       } else {
         console.error("Error submitting entry");
       }
@@ -69,9 +80,7 @@ export default function Defecttype() {
   };
 
   const handleCancel = () => {
-    decrementTotal();
-    decrementDefected();
-    router.push('/defect-check?verifiername=' + verifiername + '&checkername=' + checkername + '&partnumber=' + partnumber);
+    router.push('/supervisor/operator-entries');
   };
 
   const theme = useTheme();

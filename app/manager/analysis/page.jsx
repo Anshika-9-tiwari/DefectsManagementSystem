@@ -1,507 +1,251 @@
-import { Box, Stack, Typography, Card, Button, TextField, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
-import BuildIcon from '@mui/icons-material/Build';
-import BugReportIcon from '@mui/icons-material/BugReport';
-import SettingsIcon from '@mui/icons-material/Settings';
-import ReportIcon from '@mui/icons-material/Report';
-import * as React from 'react';
-// import { BarChart } from '@mui/x-charts/BarChart';
-import { PieChart } from '@mui/x-charts/PieChart';
+'use client'
 
+import { Box, Stack, Typography, Button, TextField, MenuItem, Select, Grid, Paper } from "@mui/material";
+import * as React from 'react';
+import ParetoChart from "./Paretochart";
+import { useRef, useState } from "react";
+import * as htmlToImage from 'html-to-image';
+import jsPDF from 'jspdf';
 
 export default function SelectionPanel() {
-//   const dataset = [
-//   {
-//     london: 59,
-//     paris: 57,
-//     newYork: 86,
-//     seoul: 21,
-//     month: 'Jan',
-//   },
-//   {
-//     london: 50,
-//     paris: 52,
-//     newYork: 78,
-//     seoul: 28,
-//     month: 'Feb',
-//   },
-//   {
-//     london: 47,
-//     paris: 53,
-//     newYork: 106,
-//     seoul: 41,
-//     month: 'Mar',
-//   },
-//   {
-//     london: 54,
-//     paris: 56,
-//     newYork: 92,
-//     seoul: 73,
-//     month: 'Apr',
-//   },
-//   {
-//     london: 57,
-//     paris: 69,
-//     newYork: 92,
-//     seoul: 99,
-//     month: 'May',
-//   },
-//   {
-//     london: 60,
-//     paris: 63,
-//     newYork: 103,
-//     seoul: 144,
-//     month: 'June',
-//   },
-//   {
-//     london: 59,
-//     paris: 60,
-//     newYork: 105,
-//     seoul: 319,
-//     month: 'July',
-//   },
-//   {
-//     london: 65,
-//     paris: 60,
-//     newYork: 106,
-//     seoul: 249,
-//     month: 'Aug',
-//   },
-//   {
-//     london: 51,
-//     paris: 51,
-//     newYork: 95,
-//     seoul: 131,
-//     month: 'Sept',
-//   },
-//   {
-//     london: 60,
-//     paris: 65,
-//     newYork: 97,
-//     seoul: 55,
-//     month: 'Oct',
-//   },
-//   {
-//     london: 67,
-//     paris: 64,
-//     newYork: 76,
-//     seoul: 48,
-//     month: 'Nov',
-//   },
-//   {
-//     london: 61,
-//     paris: 70,
-//     newYork: 103,
-//     seoul: 25,
-//     month: 'Dec',
-//   },
-// ];
-//   const chartSetting = {
-//   yAxis: [
-//     {
-//       label: 'rainfall (mm)',
-//       width: 60,
-//     },
-//   ],
-//   height: 300,
-// };
+  const [topPartsData, setTopPartsData] = useState([]);
+  const [fromDateParts, setFromDateParts] = useState('');
+  const [toDateParts, setToDateParts] = useState('');
+  const [downloadFormat, setDownloadFormat] = useState('png');
+  const chartRef = useRef(null);
+  const defectChartRef = useRef(null);
+  const [topDefectsdata, setdefectsdata] = useState([]);
+  const [fromDatedefects, setfromDatedefects] = useState('');
+  const [toDatedefects, settoDatedefects] = useState('');
+
+  const handleSubmitTopParts = async () => {
+    if (!fromDateParts || !toDateParts) return alert('Please select both dates');
+
+    const res = await fetch('/api/manager/topparts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fromDate: fromDateParts, toDate: toDateParts }),
+    });
+
+    const result = await res.json();
+    console.log("Top Parts Data Response:", result);
+    setTopPartsData(result);
+  };
+
+  const handleDownload = async () => {
+    if (!chartRef.current) return;
+
+    try {
+      const dataUrl = await htmlToImage.toPng(chartRef.current);
+
+      if (downloadFormat === 'png') {
+        const link = document.createElement('a');
+        link.download = 'top-10-parts.png';
+        link.href = dataUrl;
+        link.click();
+      } else if (downloadFormat === 'pdf') {
+        const pdf = new jsPDF('l', 'mm', 'a4');
+        const imgProps = pdf.getImageProperties(dataUrl);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('top-10-parts.pdf');
+      }
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
+  };
+
+  const handleDownloadDefects = async () => {
+    if (!defectChartRef.current) return;
+
+    try {
+      const dataUrl = await htmlToImage.toPng(defectChartRef.current);
+
+      if (downloadFormat === 'png') {
+        const link = document.createElement('a');
+        link.download = 'top-10-defects.png';
+        link.href = dataUrl;
+        link.click();
+      } else if (downloadFormat === 'pdf') {
+        const pdf = new jsPDF('l', 'mm', 'a4');
+        const imgProps = pdf.getImageProperties(dataUrl);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('top-10-defects.pdf');
+      }
+    } catch (error) {
+      console.error('Defects download failed:', error);
+    }
+  };
+
+  const handleSubmitTopdefects = async () => {
+    if (!fromDatedefects || !toDatedefects) return alert('Please select both dates');
+
+    const res = await fetch('/api/manager/topdefects', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fromDate: fromDatedefects, toDate: toDatedefects }),
+    });
+
+    const result = await res.json();
+    console.log("Top defects data response", result);
+    setdefectsdata(result);
+  };
+
   return (
     <Box
       sx={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        mt: 1,
-        px: 2,
+        minHeight: '90vh',
         width: '100%',
+        backgroundColor: '#f0f4f8',
+        borderRadius: '12px',
+        boxShadow: 4,
       }}
     >
-      <Stack direction={'column'} spacing={5} width={'100%'}>
-      <Box
-        sx={{
-          width: '100%',
-          padding: 3,
-          backgroundColor: '#f9f9f9',
-          boxShadow: 6, 
-          borderRadius: 3,
-        }}
-      >
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={9} justifyContent="center" alignItems="stretch" sx={{
-          
-        }}>
-          
-          
-          <Card
-            sx={{
-              width: { xs: '90%', sm: '60%', md: '15%' },
-              minHeight: 'auto',
-              p: 1.5,
-              textAlign: 'center',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease-in-out',
-              boxShadow: '0 4px 12px #100F33',
-              border:'1px solid #100F33',
-              '&:hover': {
-                backgroundColor: '#e3f2fd',
-                boxShadow: '0 6px 20px #100F33', 
-                transform: 'translateY(-3px)', // lift effect
-              },
-            }}
-          >
-            <Button href="#defected-parts" variant="" sx={{textTransform:'none'}}>
-                <Stack direction={'row'} spacing={2}>
-                    <BuildIcon fontSize="small"/>
-                        Top parts
-                </Stack>
-                
-            </Button>
-          </Card>
+      <Stack direction={'column'} spacing={5} width={{ xs: '90%', sm: '80%', md: '70%', lg: '60%' }}>
+        <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', color: '#333' }}>
+          Parts and Defects Analysis
+        </Typography>
 
-          <Card
-            sx={{
-              width: { xs: '90%', sm: '60%', md: '15%' },
-              border:'1px solid #100F33',
-              minHeight: 'auto',
-              p: 1.5,
-              textAlign: 'center',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease-in-out',
-              boxShadow: '0 4px 12px #100F33',
-              '&:hover': {
-                backgroundColor: '#e3f2fd',
-                boxShadow: '0 6px 20px #100F33',
-                transform: 'translateY(-3px)',
-              },
-            }}
-          >
-            <Button variant="" sx={{textTransform:'none'}}>
-                <Stack direction={'row'} spacing={1}>
-                <BugReportIcon fontSize="small"/>
-               <Typography variant="p">Top defects</Typography>
-               </Stack>
-            </Button>
-          </Card>
-          <Card
-            sx={{
-              width: { xs: '90%', sm: '60%', md: '15%' },
-              border:'1px solid #100F33',
-              minHeight: 'auto',
-              p: 1.5,
-              textAlign: 'center',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease-in-out',
-              boxShadow: '0 4px 12px #100F33',
-              '&:hover': {
-                backgroundColor: '#e3f2fd',
-                boxShadow: '0 6px 20px #100F33',
-                transform: 'translateY(-3px)',
-              },
-            }}
-          >
-            <Button variant="" sx={{textTransform:'none'}}>
-                <Stack direction={'row'} spacing={1}>
-                    <SettingsIcon fontSize="small"/>
-                    <Typography variant="p">
-                        Parts
-                    </Typography>
-                </Stack>
-            </Button>
-          </Card>
-            <Card
-            sx={{
-              width: { xs: '90%', sm: '60%', md: '15%' },
-              border:'1px solid #100F33',
-              minHeight: 'auto',
-              p: 1.5,
-              textAlign: 'center',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease-in-out',
-              boxShadow: '0 4px 12px #100F33',
-              '&:hover': {
-                backgroundColor: '#e3f2fd',
-                boxShadow: '0 6px 20px #100F33',
-                transform: 'translateY(-3px)',
-              },
-            }}
-          >
-            <Button variant="" sx={{textTransform:'none'}}>
-                <Stack direction={'row'} spacing={1}>
-                <ReportIcon fontSize="small"/>
-                <Typography variant="p">Defects</Typography>
-                </Stack>
-            </Button>
-          </Card>
+        {/* Top Parts Section */}
+        <Grid container spacing={5} sx={{ width: '100%' }}> {/* Set width to 100% */}
+          <Grid item xs={12}>
+            <Paper elevation={3} sx={{ padding: 3, borderRadius: '12px', backgroundColor: '#100F33' }}>
+              <Typography variant="h6" sx={{ color: 'white', mb: 2 }}><strong>Top 10 Parts</strong></Typography>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
+                <TextField
+                  label="From"
+                  type="date"
+                  size="small"
+                  InputLabelProps={{ 
+                    shrink: true,
+                    style: { color: '#f48fb1', fontWeight: 'bold' } 
+                  }}
+                  value={fromDateParts}
+                  onChange={(e) => setFromDateParts(e.target.value)}
+                  sx={{
+                    backgroundColor: '#f1f8e9', 
+                    '& input': { color: '#000' },
+                    '& label': { color: '#fff' }, 
+                    borderRadius: '4px',
+                  }}
+                />
+                <TextField
+                  label="To"
+                  type="date"
+                  size="small"
+                  InputLabelProps={{ 
+                    shrink: true,
+                    style: { color: '#f48fb1', fontWeight: 'bold' }
+                  }}
+                  value={toDateParts}
+                  onChange={(e) => setToDateParts(e.target.value)}
+                  sx={{
+                    backgroundColor: '#f1f8e9', 
+                    '& input': { color: '#000' },
+                    '& label': { color: '#fff' },
+                    borderRadius: '4px',
+                  }}
+                />
+                <Button variant="contained" color="primary" size="small" onClick={handleSubmitTopParts}>
+                  Submit
+                </Button>
+                <Select
+                  size="small"
+                  value={downloadFormat}
+                  onChange={(e) => setDownloadFormat(e.target.value)}
+                  sx={{
+                    backgroundColor: '#fff',
+                    color: '#000',
+                    minWidth: '160px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  <MenuItem value="png">Download PNG</MenuItem>
+                  <MenuItem value="pdf">Download PDF</MenuItem>
+                </Select>
+                <Button variant="outlined" color="secondary" size="small" onClick={handleDownload} sx={{ border: '1px solid #fff', color: '#fff' }}>
+                  Download
+                </Button>
+              </Stack>
+              <Box ref={chartRef} sx={{ mt: 2, backgroundColor: '#fff', padding: 0.5, borderRadius: '5px' }}>
+                <ParetoChart dataPoints={topPartsData} />
+              </Box>
+            </Paper>
+          </Grid>
 
-        </Stack>
-        </Box>
-        <Stack width= {'100%'} direction={{md:'row', s:'column'}}>
-            <Stack width={'100%'} id = {'top-parts'} direction={'column'} spacing={8}>
-                <Stack direction={'row'} width={'100%'} alignItems={'center'} justifyContent={'space-between'} spacing={10} sx = {{
-                  border: '1px solid grey',
-                  padding: '1%',
-                  backgroundColor:'#100F33'
-
-                  }}>
-                    <Typography variant="h6" sx = {{ 
-                      color:'white'
-                    }}><strong>Top 10 Parts</strong></Typography>
-                    <TextField
-                    type="date"
-                    size="small"
-                    sx={{
-                      backgroundColor: '#100F33',
-                      '& input': {
-                        color: 'white',
-                        '&::-webkit-calendar-picker-indicator': {
-                          filter: 'invert(1)',
-                        },
-                      },
-                    }}
-                  />
-
-                    
-                </Stack>
-                <Stack direction={'row'} width={'100%'}>
-                  <Box flex={1}>
-                    {/* <BarChart
-      dataset={dataset}
-      xAxis={[{ dataKey: 'month' }]}
-      series={[
-        { dataKey: 'london', label: 'London',  },
-        { dataKey: 'paris', label: 'Paris',  },
-        { dataKey: 'newYork', label: 'New York',  },
-        { dataKey: 'seoul', label: 'Seoul',  },
-      ]}
-      {...chartSetting}
-    /> */}
-    </Box>
-    <Box>
-    <PieChart
-      series={[
-        {
-          data: [
-            { id: 0, value: 10, label: 'series A' },
-            { id: 1, value: 15, label: 'series B' },
-            { id: 2, value: 20, label: 'series C' },
-          ],
-        },
-      ]}
-      width={170}
-      height={300}
-    />
-    </Box>
+          {/* Top Defects Section */}
+          <Grid item xs={12}>
+            <Paper elevation={3} sx={{ padding: 3, borderRadius: '12px', backgroundColor: '#100F33' }}>
+              <Typography variant="h6" sx={{ color: 'white', mb: 2 }}><strong>Top 10 Defects</strong></Typography>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
+                <TextField
+                  label="From"
+                  type="date"
+                  size="small"
+                  InputLabelProps={{ 
+                    shrink: true,
+                    style: { color: '#f48fb1', fontWeight: 'bold' }
+                  }}
+                  value={fromDatedefects}
+                  onChange={(e) => setfromDatedefects(e.target.value)}
+                  sx={{
+                    backgroundColor: '#f1f8e9', 
+                    '& input': { color: '#000' },
+                    '& label': { color: '#fff' }, 
+                    borderRadius: '4px',
+                  }}
+                />
+                <TextField
+                  label="To"
+                  type="date"
+                  size="small"
+                  InputLabelProps={{ 
+                    shrink: true,
+                    style: { color: '#f48fb1', fontWeight: 'bold' } 
+                  }}
+                  value={toDatedefects}
+                  onChange={(e) => settoDatedefects(e.target.value)}
+                  sx={{
+                    backgroundColor: '#f1f8e9', 
+                    '& input': { color: '#000' },
+                    '& label': { color: '#fff' }, 
+                    borderRadius: '4px',
+                  }}
+                />
+                <Button variant="contained" color="primary" size="small" onClick={handleSubmitTopdefects}>
+                  Submit
+                </Button>
+                <Select
+                  size="small"
+                  value={downloadFormat}
+                  onChange={(e) => setDownloadFormat(e.target.value)}
+                  sx={{
+                    backgroundColor: '#fff',
+                    color: '#000',
+                    minWidth: '160px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  <MenuItem value="png">Download PNG</MenuItem>
+                  <MenuItem value="pdf">Download PDF</MenuItem>
+                </Select>
+                <Button variant="outlined" color="primary" size="small" onClick={handleDownloadDefects} sx={{ border: '1px solid #fff', color: '#fff' }}>
+                  Download
+                </Button>
+              </Stack>
+              <Box ref={defectChartRef} sx={{ mt: 2, backgroundColor: '#fff', padding: 0.5, borderRadius: '5px' }}>
+                <ParetoChart dataPoints={topDefectsdata} />
+              </Box>
+            </Paper>
+          </Grid>
+        </Grid>
       </Stack>
-      <Stack id={'top-defects'} direction={'row'} width={'100%'} alignItems={'center'} justifyContent={'space-between'} spacing={10} sx = {{
-                  border: '1px solid grey',
-                  padding: '1%',
-                  backgroundColor:'#100F33'
-
-                  }}>
-                    <Typography variant="h6" sx = {{ 
-                      color:'white'
-                    }}><strong>Top 10 Defects</strong></Typography>
-                    <TextField
-                    type="date"
-                    size="small"
-                    sx={{
-                      backgroundColor: '#100F33',
-                      '& input': {
-                        color: 'white',
-                        '&::-webkit-calendar-picker-indicator': {
-                          filter: 'invert(1)',
-                        },
-                      },
-                    }}
-                  />
-
-      </Stack>
-      <Stack direction={'row'} width={'100%'}>
-      <Box flex={1}>
-                            {/* <BarChart
-      dataset={dataset}
-      xAxis={[{ dataKey: 'month' }]}
-      series={[
-        { dataKey: 'london', label: 'London',  },
-        { dataKey: 'paris', label: 'Paris',  },
-        { dataKey: 'newYork', label: 'New York',  },
-        { dataKey: 'seoul', label: 'Seoul',  },
-      ]}
-      {...chartSetting}
-    /> */}
-    </Box>
-    <Box>
-    <PieChart
-      series={[
-        {
-          data: [
-            { id: 0, value: 10, label: 'series A' },
-            { id: 1, value: 15, label: 'series B' },
-            { id: 2, value: 20, label: 'series C' },
-          ],
-        },
-      ]}
-      width={170}
-      height={300}
-    />
-    </Box>
-      </Stack>
-            <Stack direction={'row'} id = {'defected-parts'} width={'100%'} alignItems={'center'} justifyContent={'space-between'} spacing={10} sx = {{
-                  border: '1px solid grey',
-                  padding: '1%',
-                  backgroundColor:'#100F33'
-                  }}>
-                    <Typography variant="h6" sx = {{ 
-                      color:'white'
-                    }}><strong>Defected parts</strong></Typography>
-                      {/* Select for part number */}
-  <Stack direction="row" spacing={2} alignItems="center">
-  <FormControl size="small" sx={{ minWidth: 150 }}>
-    <InputLabel sx={{ color: 'white' }}>Part Number</InputLabel>
-    <Select
-      label="Part Number"
-      defaultValue=""
-      sx={{
-        color: 'white',
-        backgroundColor: '#100F33',
-        borderColor: 'white',
-        '& .MuiSvgIcon-root': {
-          color: 'white', // dropdown arrow
-        },
-      }}
-    >
-      <MenuItem value={1}>Part 1</MenuItem>
-      <MenuItem value={2}>Part 2</MenuItem>
-      <MenuItem value={3}>Part 3</MenuItem>
-    </Select>
-  </FormControl>
-                    <TextField
-                    type="date"
-                    size="small"
-                    sx={{
-                      backgroundColor: '#100F33',
-                      '& input': {
-                        color: 'white',
-                        // This is the actual calendar icon
-                        '&::-webkit-calendar-picker-indicator': {
-                          filter: 'invert(1)',
-                        },
-                      },
-                    }}
-                  />
-
-                  </Stack>
-                  </Stack>
-            <Stack direction={'row'} width={'100%'}>
-              <Box flex={1}>
-              {/* <BarChart
-      dataset={dataset}
-      xAxis={[{ dataKey: 'month' }]}
-      series={[
-        { dataKey: 'london', label: 'London',  },
-        { dataKey: 'paris', label: 'Paris',  },
-        { dataKey: 'newYork', label: 'New York',  },
-        { dataKey: 'seoul', label: 'Seoul',  },
-      ]}
-      {...chartSetting}
-    /> */}
-    </Box>
-    <Box>
-    <PieChart
-      series={[
-        {
-          data: [
-            { id: 0, value: 10, label: 'series A' },
-            { id: 1, value: 15, label: 'series B' },
-            { id: 2, value: 20, label: 'series C' },
-          ],
-        },
-      ]}
-      width={170}
-      height={300}
-    />
-    </Box>
-            </Stack>
-                        <Stack direction={'row'} id = {'defect-analysis'} width={'100%'} alignItems={'center'} justifyContent={'space-between'} spacing={10} sx = {{
-                  border: '1px solid grey',
-                  padding: '1%',
-                  backgroundColor:'#100F33'
-                  }}>
-                    <Typography variant="h6" sx = {{ 
-                      color:'white'
-                    }}><strong>Defect analysis</strong></Typography>
-                      {/* Select for part number */}
-  <Stack direction="row" spacing={2} alignItems="center">
-  <FormControl size="small" sx={{ minWidth: 150 }}>
-    <InputLabel sx={{ color: 'white' }}>Defect</InputLabel>
-    <Select
-      label="Defect"
-      defaultValue=""
-      sx={{
-        color: 'white',
-        backgroundColor: '#100F33',
-        borderColor: 'white',
-        '& .MuiSvgIcon-root': {
-          color: 'white', // dropdown arrow
-        },
-      }}
-    >
-      <MenuItem value={1}>Defect 1</MenuItem>
-      <MenuItem value={2}>Defect 2</MenuItem>
-      <MenuItem value={3}>Defect 3</MenuItem>
-    </Select>
-  </FormControl>
-                    <TextField
-                    type="date"
-                    size="small"
-                    sx={{
-                      backgroundColor: '#100F33',
-                      '& input': {
-                        color: 'white',
-                        // This is the actual calendar icon
-                        '&::-webkit-calendar-picker-indicator': {
-                          filter: 'invert(1)',
-                        },
-                      },
-                    }}
-                  />
-
-                  </Stack>
-                  </Stack>
-
-          <Stack direction={'row'} width={'100%'}>
-            <Box flex={1}>
-              {/* <BarChart
-      dataset={dataset}
-      xAxis={[{ dataKey: 'month' }]}
-      series={[
-        { dataKey: 'london', label: 'London',  },
-        { dataKey: 'paris', label: 'Paris',  },
-        { dataKey: 'newYork', label: 'New York',  },
-        { dataKey: 'seoul', label: 'Seoul',  },
-      ]}
-      {...chartSetting}
-    /> */}
-    </Box>
-    <Box>
-    <PieChart
-      series={[
-        {
-          data: [
-            { id: 0, value: 10, label: 'series A' },
-            { id: 1, value: 15, label: 'series B' },
-            { id: 2, value: 20, label: 'series C' },
-          ],
-        },
-      ]}
-      width={170}
-      height={300}
-    />
-    </Box>
-            </Stack>
-            </Stack>
-
-        </Stack>
-        </Stack>
-
     </Box>
   );
 }

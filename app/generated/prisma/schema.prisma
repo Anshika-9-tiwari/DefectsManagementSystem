@@ -29,7 +29,7 @@ model entry {
   checkername  String
   partnumber   String
   defectstatus String
-  defect       String
+  defect       String[]
   datetime     DateTime @default(now())
 }
 
@@ -71,6 +71,8 @@ model Part {
   vacuumTestingRequired       String
   vacuumTestingPerformed      String
   padPrintingFixture          String
+  inspectionModule            String @default("n/a")
+  itemCode                    String @default("n/a")
   column                      String @default(" ")
 }
 

@@ -69,7 +69,7 @@ export default function Users() {
                     <Typography variant="h4">Users</Typography>
                 </Stack>
                 <Stack direction={"row"} spacing={2} flexWrap="wrap" gap={2}  >
-                    {['Operators', 'Supervisors', 'Managers', 'Administrators', 'All'].map(role => (
+                    {/* {['Operators', 'Supervisors', 'Managers', 'Administrators', 'All'].map(role => (
                         <Button key={role} variant="outlined" sx={{
                             textTransform: 'none',
                             color: 'black',
@@ -82,7 +82,7 @@ export default function Users() {
                         }}>
                             <Typography variant="body2">{role}</Typography>
                         </Button>
-                    ))}
+                    ))} */}
                     <Button variant="contained" color="primary" onClick={() => setModalOpen(true)} sx={{
                         textTransform: 'none',
                         borderRadius: '10px',

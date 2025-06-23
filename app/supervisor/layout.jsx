@@ -18,14 +18,15 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import GroupIcon from '@mui/icons-material/Group';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ReportIcon from '@mui/icons-material/Report';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import Image from 'next/image';
 
 const drawerWidth = 240;
 
 const menuItems = [
-  { text: 'Users', href: '/dashboard/users', icon: <GroupIcon /> },
-  { text: 'Parts', href: '/dashboard/parts', icon: <SettingsIcon /> },
-  { text: 'Defects', href: '/dashboard/defects', icon: <ReportIcon /> },
+  { text: 'Operator Entries', href: '/supervisor/operator-entries', icon: <FormatListBulletedIcon/> },
+  { text: 'Operator Scheduling', href: '/supervisor/operator-scheduling', icon: <EventAvailableIcon /> },
 ];
 
 export default function DashboardLayout({ children }) {
@@ -38,8 +39,7 @@ export default function DashboardLayout({ children }) {
 
   const drawerContent = (
     <>
-    
-      <Toolbar sx={{ justifyContent: 'space-between', px: 2, py:4 }}>
+      <Toolbar sx={{ justifyContent: 'space-between', px: 2 }}>
         <IconButton onClick={toggleDrawer} sx={{ color: 'white' }}>
           <ChevronLeftIcon />
         </IconButton>
@@ -85,7 +85,6 @@ export default function DashboardLayout({ children }) {
   );
 
   return (
-    
     <Box sx={{ display: 'flex' }}>
       {/* Toggle Drawer when closed */}
       {!open && (
@@ -103,6 +102,7 @@ export default function DashboardLayout({ children }) {
         >
           <ChevronRightIcon />
         </IconButton>
+        
       )}
 
       {/* Drawer */}
@@ -112,7 +112,7 @@ export default function DashboardLayout({ children }) {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          display: open ? 'block' : 'none', // 👈 hide the drawer entirely when closed
+          display: open ? 'block' : 'none', 
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: 'border-box',
@@ -129,7 +129,7 @@ export default function DashboardLayout({ children }) {
         sx={{
           flexGrow: 1,
           bgcolor: 'background.default',
-          ml: open ? `5%` : '0%', // ← only if you're toggling
+          ml: open ? `0%` : '0%', 
           transition: 'margin 0.3s ease',
           width: open ? `calc(100% - ${drawerWidth}px)` : '100%'
         }}
