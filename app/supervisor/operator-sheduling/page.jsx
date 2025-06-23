@@ -1,27 +1,27 @@
 'use client'
 
-import { Stack,
-     Box,
-      Input,
-      Typography,
-      TableContainer,
-      Table,
-      TableBody,
-      TableHead,
-      TableCell,
-      TableRow,
-      Button,
-      TextField,
-      Select,
-      MenuItem,
-      InputLabel} from "@mui/material";
+import {
+  Stack,
+  Box,
+  Typography,
+  TableContainer,
+  Table,
+  TableBody,
+  TableHead,
+  TableCell,
+  TableRow,
+  Button,
+  TextField,
+  InputLabel,
+  useMediaQuery
+} from "@mui/material";
+import React, { useState } from "react";
 
-import React,{useState,useEffect} from "react";
-
-export default function (){
+export default function OperatorInspectionSummary() {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [summary, setSummary] = useState(null);
+  const isMobile = useMediaQuery('(max-width:600px)'); // Check if the screen is mobile size
 
   const handleSubmit = async () => {
     const res = await fetch('/api/supervisor/operator-inspection', {
@@ -34,66 +34,62 @@ export default function (){
     setSummary(data);
   };
 
+  return (
+    <Box width={'100%'} sx={{ marginTop: '2em', padding: { xs: 2, sm: 3 } }}>
+      <Stack direction={'column'} width={'100%'} spacing={5}>
+        <Typography variant="h4">Operator Inspection Summary</Typography>
+        <Stack direction={'column'} spacing={2} sx={{ backgroundColor: '#100F33', padding: 2, borderRadius: '8px' }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} alignItems="center">
+            <InputLabel sx={{ color: 'white' }}>Select date</InputLabel>
+            <TextField
+              label="From"
+              type="date"
+              size="small"
+              InputLabelProps={{ shrink: true }}
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+              sx={{
+                backgroundColor: '#100F33',
+                '& input': {
+                  color: 'white',
+                  '&::-webkit-calendar-picker-indicator': {
+                    filter: 'invert(1)',
+                  },
+                },
+                '& label': {
+                  color: 'white',
+                },
+                flexGrow: 1, // Allow to grow
+              }}
+            />
+            <TextField
+              label="To"
+              type="date"
+              size="small"
+              InputLabelProps={{ shrink: true }}
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+              sx={{
+                backgroundColor: '#100F33',
+                '& input': {
+                  color: 'white',
+                  '&::-webkit-calendar-picker-indicator': {
+                    filter: 'invert(1)',
+                  },
+                },
+                '& label': {
+                  color: 'white',
+                },
+                flexGrow: 1, // Allow to grow
+              }}
+            />
+            <Button variant="contained" color="primary" size="small" onClick={handleSubmit} sx={{ textTransform: 'none' }}>
+              Submit
+            </Button>
+          </Stack>
+        </Stack>
 
-    return (
-
-        <Box width={'100%'} sx = {{ marginTop:'2em'
-                }}>
-        <Stack direction={'column'} width={'100%'} spacing={5}>
-                <Typography variant="h5" > Operator Inspection Summary</Typography>
-                <Stack direction={'row'} width={'100%'} sx = {{backgroundColor:'#100F33', height:'10vh', alignItems:'center', justifyContent:'space-between', paddingLeft:'2em', paddingRight:'2em'}}>
-                                  <InputLabel sx = {{color:'white'}}> Select date </InputLabel>
-                                  <TextField
-                                    label="From"
-                                    type="date"
-                                    size="small"
-                                    InputLabelProps={{ shrink: true }}
-                                    value={fromDate}
-                                    onChange={(e) => setFromDate(e.target.value)}
-                                    sx={{
-                                      backgroundColor: '#100F33',
-                                      '& input': {
-                                        color: 'white',
-                                        // This is the actual calendar icon
-                                        '&::-webkit-calendar-picker-indicator': {
-                                          filter: 'invert(1)',
-                                        },
-                                      },
-                                      '& label': {
-                                        color: 'white',
-                                      },
-                                    }}
-                                  />
-                                  <TextField
-                                    label="To"
-                                    type="date"
-                                    size="small"
-                                    InputLabelProps={{ shrink: true }}
-                                    value={toDate}
-                                    onChange={(e) => setToDate(e.target.value)}
-                                    sx={{
-                                      backgroundColor: '#100F33',
-                                      '& input': {
-                                        color: 'white',
-                                        '&::-webkit-calendar-picker-indicator': {
-                                          filter: 'invert(1)',
-                                        },
-                                      },
-                                      '& label': {
-                                        color: 'white',
-                                      },
-                                    }}
-                                  />                                  
-                    
-                                  {/* Submit Button */}
-                                  <Button variant="contained" color="primary" size="small" onClick={handleSubmit}  sx={{
-                                    textTransform: 'none'
-                                  }}>
-                                    Submit
-                                  </Button>
-                </Stack>
-
-                        {summary && (
+        {summary && (
           <TableContainer>
             <Table size="small">
               <TableHead>
@@ -132,9 +128,7 @@ export default function (){
             </Table>
           </TableContainer>
         )}
-            
-        </Stack>
-      </Box>
-
-    )
+      </Stack>
+    </Box>
+  );
 }

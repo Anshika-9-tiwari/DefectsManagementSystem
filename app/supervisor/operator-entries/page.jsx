@@ -3,7 +3,7 @@
 import {
   Stack,
   Box,
-  Input,
+  InputLabel,
   Typography,
   TableContainer,
   Table,
@@ -15,35 +15,31 @@ import {
   TextField,
   Select,
   MenuItem,
-  InputLabel,
-  IconButton
+  IconButton,
+  useMediaQuery
 } from "@mui/material"
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 
-
-
-export default function () {
-
+export default function OperatorEntries() {
   const [fromdate, setfrom] = useState('');
   const [todate, setto] = useState('');
   const [partnum, setpartnum] = useState('');
   const [parts, setparts] = useState([]);
   const [entries, setEntries] = useState([]);
   const router = useRouter();
+  const isMobile = useMediaQuery('(max-width:600px)'); // Check if the screen is mobile size
 
   useEffect(() => {
     const fetchparts = async () => {
       try {
         const res = await fetch('/api/dashboard/parts');
         const data = await res.json();
-
-        // Only store the 'defect' field
         const partsss = data.map(p => p.assyPartNo);
         setparts(partsss);
       } catch (error) {
-        console.error('Failed to fetch defects:', error);
+        console.error('Failed to fetch parts:', error);
       }
     };
 
@@ -65,7 +61,7 @@ export default function () {
       });
 
       const data = await res.json();
-      setEntries(data); // or setEntries(data)
+      setEntries(data);
     } catch (err) {
       console.error('Failed to fetch operator entries:', err);
     }
@@ -84,7 +80,6 @@ export default function () {
       });
 
       if (res.ok) {
-        // Optionally re-fetch entries after deletion
         setEntries(prev => prev.filter(entry => entry.id !== id));
         alert('Deleted successfully');
       } else {
@@ -96,79 +91,73 @@ export default function () {
   };
 
   return (
-    <Box width={'100%'} sx={{
-      marginTop: '2em'
-    }}>
+    <Box width={'90%'} flex={1} justifyContent={'center'} sx={{ marginTop: '2em', marginLeft:'2em', padding: { xs: 2, sm: 5 }}}>
       <Stack direction={'column'} width={'100%'} spacing={5}>
-        <Typography variant="h5" > Operator Entries</Typography>
-        <Stack direction={'row'} width={'100%'} sx={{ backgroundColor: '#100F33', height: '10vh', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '2em', paddingRight: '2em' }}>
-          <InputLabel sx={{ color: 'white' }}> Select part number</InputLabel>
-          <Select
-            size="small"
-            value={partnum}
-            onChange={(e) => setpartnum(e.target.value)}
-            sx={{
-              backgroundColor: '#100F33',
-              color: 'white',
-              border: '1px solid grey',
-              minWidth: '150px',
-              '& .MuiSvgIcon-root': { color: 'white' },
-            }}
-          >
-            <MenuItem value="All">All</MenuItem>
-            {parts.map((p) => (<MenuItem value={p}>{p}</MenuItem>))}
-          </Select>
-          <TextField
-            label="From"
-            type="date"
-            size="small"
-            InputLabelProps={{ shrink: true }}
-            value={fromdate}
-            onChange={(e) => setfrom(e.target.value)}
-            sx={{
-              backgroundColor: '#100F33',
-              '& input': {
+        <Typography variant="h4">Operator Entries</Typography>
+        <Stack direction={'column'} spacing={2} sx={{ backgroundColor: '#100F33', padding: 2, borderRadius: '8px' }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
+            <InputLabel sx={{ color: 'white' }}>Select part number</InputLabel>
+            <Select
+              size="small"
+              value={partnum}
+              onChange={(e) => setpartnum(e.target.value)}
+              sx={{
+                backgroundColor: '#100F33',
                 color: 'white',
-                // This is the actual calendar icon
-                '&::-webkit-calendar-picker-indicator': {
-                  filter: 'invert(1)',
+                border: '1px solid grey',
+                minWidth: '150px',
+                '& .MuiSvgIcon-root': { color: 'white' },
+              }}
+            >
+              <MenuItem value="All">All</MenuItem>
+              {parts.map((p, index) => (<MenuItem key={index} value={p}>{p}</MenuItem>))}
+            </Select>
+            <TextField
+              label="From"
+              type="date"
+              size="small"
+              InputLabelProps={{ shrink: true }}
+              value={fromdate}
+              onChange={(e) => setfrom(e.target.value)}
+              sx={{
+                backgroundColor: '#100F33',
+                '& input': {
+                  color: 'white',
+                  '&::-webkit-calendar-picker-indicator': {
+                    filter: 'invert(1)',
+                  },
                 },
-              },
-              '& label': {
-                color: 'white',
-              },
-            }}
-          />
-          <TextField
-            label="To"
-            type="date"
-            size="small"
-            InputLabelProps={{ shrink: true }}
-            value={todate}
-            onChange={(e) => setto(e.target.value)}
-            sx={{
-              backgroundColor: '#100F33',
-              '& input': {
-                color: 'white',
-                '&::-webkit-calendar-picker-indicator': {
-                  filter: 'invert(1)',
+                '& label': {
+                  color: 'white',
                 },
-              },
-              '& label': {
-                color: 'white',
-              },
-            }}
-          />
-
-          {/* Submit Button */}
-          <Button variant="contained" color="primary" size="small" onClick={fetchOperatorEntries} sx={{
-            textTransform: 'none'
-          }}>
-            Submit
-          </Button>
-
+              }}
+            />
+            <TextField
+              label="To"
+              type="date"
+              size="small"
+              InputLabelProps={{ shrink: true }}
+              value={todate}
+              onChange={(e) => setto(e.target.value)}
+              sx={{
+                backgroundColor: '#100F33',
+                '& input': {
+                  color: 'white',
+                  '&::-webkit-calendar-picker-indicator': {
+                    filter: 'invert(1)',
+                  },
+                },
+                '& label': {
+                  color: 'white',
+                },
+              }}
+            />
+            <Button variant="contained" color="primary" size="small" onClick={fetchOperatorEntries} sx={{ textTransform: 'none' }}>
+              Submit
+            </Button>
+          </Stack>
         </Stack>
-        <TableContainer>
+        <TableContainer sx={{ maxHeight: isMobile ? '400px' : '600px', overflowY: 'auto',  borderRadius: '8px', boxShadow: 3 }}>
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -190,13 +179,14 @@ export default function () {
                   <TableCell>{new Date(entry.datetime).toLocaleString()}</TableCell>
                   <TableCell>
                     <Button color="error" size="small" onClick={() => handleDelete(entry.id)}>Remove</Button>
-                    <IconButton   onClick={() => {router.push(`/supervisor/edit-defect?id=${entry.id}&verifiername=${entry.verifiername}&checkername=${entry.checkername}&partnumber=${entry.partnumber}`);}}> <EditIcon/></IconButton>
+                    <IconButton onClick={() => { router.push(`/supervisor/edit-defect?id=${entry.id}&verifiername=${entry.verifiername}&checkername=${entry.checkername}&partnumber=${entry.partnumber}`); }}>
+                      <EditIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-
         </TableContainer>
       </Stack>
     </Box>

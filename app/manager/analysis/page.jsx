@@ -102,9 +102,9 @@ export default function SelectionPanel() {
         alignItems: 'center',
         minHeight: '90vh',
         width: '100%',
-        backgroundColor: '#f0f4f8',
         borderRadius: '12px',
         boxShadow: 4,
+        padding: { xs: 2, sm: 3 }, // Responsive padding
       }}
     >
       <Stack direction={'column'} spacing={5} width={{ xs: '90%', sm: '80%', md: '70%', lg: '60%' }}>
@@ -113,7 +113,7 @@ export default function SelectionPanel() {
         </Typography>
 
         {/* Top Parts Section */}
-        <Grid container spacing={5} sx={{ width: '100%' }}> {/* Set width to 100% */}
+        <Grid container spacing={5} sx={{ width: '100%' }}>
           <Grid item xs={12}>
             <Paper elevation={3} sx={{ padding: 3, borderRadius: '12px', backgroundColor: '#100F33' }}>
               <Typography variant="h6" sx={{ color: 'white', mb: 2 }}><strong>Top 10 Parts</strong></Typography>
@@ -124,15 +124,16 @@ export default function SelectionPanel() {
                   size="small"
                   InputLabelProps={{ 
                     shrink: true,
-                    style: { color: '#f48fb1', fontWeight: 'bold' } 
+                    style: { color: 'red', fontWeight: 'bold' } 
                   }}
                   value={fromDateParts}
                   onChange={(e) => setFromDateParts(e.target.value)}
                   sx={{
-                    backgroundColor: '#f1f8e9', 
+                    backgroundColor: '#f5f5f5', 
                     '& input': { color: '#000' },
                     '& label': { color: '#fff' }, 
                     borderRadius: '4px',
+                    flexGrow: 1, // Allow to grow
                   }}
                 />
                 <TextField
@@ -141,15 +142,16 @@ export default function SelectionPanel() {
                   size="small"
                   InputLabelProps={{ 
                     shrink: true,
-                    style: { color: '#f48fb1', fontWeight: 'bold' }
+                    style: { color: 'red', fontWeight: 'bold' }
                   }}
                   value={toDateParts}
                   onChange={(e) => setToDateParts(e.target.value)}
                   sx={{
-                    backgroundColor: '#f1f8e9', 
+                    backgroundColor: '#f5f5f5', 
                     '& input': { color: '#000' },
                     '& label': { color: '#fff' },
                     borderRadius: '4px',
+                    flexGrow: 1, // Allow to grow
                   }}
                 />
                 <Button variant="contained" color="primary" size="small" onClick={handleSubmitTopParts}>
@@ -190,15 +192,16 @@ export default function SelectionPanel() {
                   size="small"
                   InputLabelProps={{ 
                     shrink: true,
-                    style: { color: '#f48fb1', fontWeight: 'bold' }
+                    style: { color: 'red', fontWeight: 'bold' }
                   }}
                   value={fromDatedefects}
                   onChange={(e) => setfromDatedefects(e.target.value)}
                   sx={{
-                    backgroundColor: '#f1f8e9', 
+                    backgroundColor: '#f5f5f5', 
                     '& input': { color: '#000' },
                     '& label': { color: '#fff' }, 
                     borderRadius: '4px',
+                    flexGrow: 1, // Allow to grow
                   }}
                 />
                 <TextField
@@ -207,15 +210,16 @@ export default function SelectionPanel() {
                   size="small"
                   InputLabelProps={{ 
                     shrink: true,
-                    style: { color: '#f48fb1', fontWeight: 'bold' } 
+                    style: { color: 'red', fontWeight: 'bold' } 
                   }}
                   value={toDatedefects}
                   onChange={(e) => settoDatedefects(e.target.value)}
                   sx={{
-                    backgroundColor: '#f1f8e9', 
+                    backgroundColor: '#f5f5f5', 
                     '& input': { color: '#000' },
                     '& label': { color: '#fff' }, 
                     borderRadius: '4px',
+                    flexGrow: 1, // Allow to grow
                   }}
                 />
                 <Button variant="contained" color="primary" size="small" onClick={handleSubmitTopdefects}>
