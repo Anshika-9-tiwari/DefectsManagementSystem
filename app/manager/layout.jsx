@@ -42,7 +42,7 @@ export default function ManagerLayout({ children }) {
   const drawerContent = (
     <>
       <Toolbar sx={{ justifyContent: 'space-between', px: 2 }}>
-        <IconButton onClick={toggleDrawer} sx={{ color: 'white' }}>
+        <IconButton onClick={toggleDrawer} sx={{ color: 'white', '&:hover': { backgroundColor: 'white', color:'black'} , marginTop: 1 }}>
           <ChevronLeftIcon />
         </IconButton>
         <Box sx={{display: 'flex',  }}>
@@ -97,7 +97,7 @@ export default function ManagerLayout({ children }) {
             top: 10,
             left: 0,
             zIndex: 1300,
-            backgroundColor: '#100F33',
+            backgroundColor: '#4ebcf7',
             borderRadius: '0 4px 4px 0',
             color: 'white',
           }}
@@ -116,8 +116,13 @@ export default function ManagerLayout({ children }) {
           display: open ? 'block' : 'none', 
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
+            borderTopRightRadius: '8px',
+            borderBottomRightRadius: '8px',
+            border: 'none',
+            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+            padding: '2px',
             boxSizing: 'border-box',
-            backgroundColor: '#100F33',
+            backgroundColor: '#4ebcf7',
           },
         }}
       >

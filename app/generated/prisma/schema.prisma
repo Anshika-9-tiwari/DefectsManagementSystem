@@ -81,3 +81,5 @@ model Defects {
   defectcode String
   defect     String
 }
+
+//prisma/migrations/20250617102517_iniiiiiiiiiittttttt

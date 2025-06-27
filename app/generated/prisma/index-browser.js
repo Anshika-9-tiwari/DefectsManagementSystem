@@ -177,6 +177,8 @@ exports.Prisma.PartScalarFieldEnum = {
   vacuumTestingRequired: 'vacuumTestingRequired',
   vacuumTestingPerformed: 'vacuumTestingPerformed',
   padPrintingFixture: 'padPrintingFixture',
+  inspectionModule: 'inspectionModule',
+  itemCode: 'itemCode',
   column: 'column'
 };
 

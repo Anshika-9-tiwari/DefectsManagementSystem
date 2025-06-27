@@ -95,8 +95,8 @@ export default function Defectcheck() {
     <Box
       component="main"
       sx={{
-        background:
-          'linear-gradient(135deg, #e0e7ff 20%, #c7d2fe 90%, #a5b4fc 100%)',
+        // background:
+        //   'linear-gradient(135deg, #e0e7ff 20%, #c7d2fe 90%, #a5b4fc 100%)',
         minHeight: '100vh',
         py: 5,
         px: 2,

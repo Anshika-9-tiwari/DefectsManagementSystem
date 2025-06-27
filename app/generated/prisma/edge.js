@@ -193,7 +193,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Ansh kakkar\\Desktop\\new1 - Copy (2)\\primsa-postgre\\app\\generated\\prisma",
+      "value": "C:\\Users\\tiwar\\Desktop\\NextProjects\\material-inspection-tool\\material-inspection-tool-main\\app\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -207,7 +207,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\Ansh kakkar\\Desktop\\new1 - Copy (2)\\primsa-postgre\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\tiwar\\Desktop\\NextProjects\\material-inspection-tool\\material-inspection-tool-main\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -229,8 +229,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Users {\n  id       Int     @id @default(autoincrement())\n  name     String\n  username String  @unique\n  password String\n  role     String  @default(\"user\")\n  email    String?\n}\n\nmodel entry {\n  id           Int      @id @default(autoincrement())\n  verifiername String\n  checkername  String\n  partnumber   String\n  defectstatus String\n  defect       String[]\n  datetime     DateTime @default(now())\n}\n\nmodel Part {\n  id                          Int    @id @default(autoincrement())\n  customer                    String\n  assyPartNo                  String\n  subAssyPartNo               String\n  qualityPlanAvailable        String\n  idA                         String\n  plugGaugeAvailableA         String\n  idB                         String\n  plugGaugeAvailableB         String\n  wallThicknessA              String\n  wallThicknessB              String\n  flareLengthMin              String\n  endCapLengthMin             String\n  profileFixtureAvailable     String\n  hardness                    String\n  hardnessPinGaugeAvailable   String\n  notchingRequired            String\n  notchingToolAvailable       String\n  connectorRequired           String\n  connectorFixtureAvailable   String\n  oetikerClampRequired        String\n  oetikerClampFixture         String\n  mubeaClamp                  String\n  mubeaClampFixture           String\n  springBandClamp             String\n  heatSinkSleeve              String\n  assyProfileFixtureAvailable String\n  leakageTestingRequired      String\n  leakageTestingPerformed     String\n  leakageFixtureAvailable     String\n  numLeakageFixtures          Int\n  cleanlinessMiliporeTest     String\n  burstReqAvailable           String\n  pullOutLoad                 String\n  vacuumTestingRequired       String\n  vacuumTestingPerformed      String\n  padPrintingFixture          String\n  inspectionModule            String @default(\"n/a\")\n  itemCode                    String @default(\"n/a\")\n  column                      String @default(\" \")\n}\n\nmodel Defects {\n  id         Int    @id @default(autoincrement())\n  defectcode String\n  defect     String\n}\n",
-  "inlineSchemaHash": "55139a73419aada8fa8eb7ebd55e680a9346c529ad07026539ab5177912b6a43",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Users {\n  id       Int     @id @default(autoincrement())\n  name     String\n  username String  @unique\n  password String\n  role     String  @default(\"user\")\n  email    String?\n}\n\nmodel entry {\n  id           Int      @id @default(autoincrement())\n  verifiername String\n  checkername  String\n  partnumber   String\n  defectstatus String\n  defect       String[]\n  datetime     DateTime @default(now())\n}\n\nmodel Part {\n  id                          Int    @id @default(autoincrement())\n  customer                    String\n  assyPartNo                  String\n  subAssyPartNo               String\n  qualityPlanAvailable        String\n  idA                         String\n  plugGaugeAvailableA         String\n  idB                         String\n  plugGaugeAvailableB         String\n  wallThicknessA              String\n  wallThicknessB              String\n  flareLengthMin              String\n  endCapLengthMin             String\n  profileFixtureAvailable     String\n  hardness                    String\n  hardnessPinGaugeAvailable   String\n  notchingRequired            String\n  notchingToolAvailable       String\n  connectorRequired           String\n  connectorFixtureAvailable   String\n  oetikerClampRequired        String\n  oetikerClampFixture         String\n  mubeaClamp                  String\n  mubeaClampFixture           String\n  springBandClamp             String\n  heatSinkSleeve              String\n  assyProfileFixtureAvailable String\n  leakageTestingRequired      String\n  leakageTestingPerformed     String\n  leakageFixtureAvailable     String\n  numLeakageFixtures          Int\n  cleanlinessMiliporeTest     String\n  burstReqAvailable           String\n  pullOutLoad                 String\n  vacuumTestingRequired       String\n  vacuumTestingPerformed      String\n  padPrintingFixture          String\n  inspectionModule            String @default(\"n/a\")\n  itemCode                    String @default(\"n/a\")\n  column                      String @default(\" \")\n}\n\nmodel Defects {\n  id         Int    @id @default(autoincrement())\n  defectcode String\n  defect     String\n}\n\n//prisma/migrations/20250617102517_iniiiiiiiiiittttttt\n",
+  "inlineSchemaHash": "51f6fb3b9972b092f3a48db01331ca7e7b6956fc59d5d8643c554dd7834f9c30",
   "copyEngine": true
 }
 config.dirname = '/'
@@ -253,3 +253,4 @@ if (typeof globalThis !== 'undefined' && globalThis['DEBUG'] || typeof process !
 const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
+

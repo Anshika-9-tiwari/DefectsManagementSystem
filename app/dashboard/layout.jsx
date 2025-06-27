@@ -39,17 +39,17 @@ export default function DashboardLayout({ children }) {
   const drawerContent = (
     <>
     
-      <Toolbar sx={{ justifyContent: 'space-between', px: 2, py:4 }}>
-        <IconButton onClick={toggleDrawer} sx={{ color: 'white' }}>
+      <Toolbar sx={{ justifyContent: 'space-between', px: 2, py:3 }}>
+        <IconButton onClick={toggleDrawer} sx={{ color: 'white', '&:hover': { backgroundColor: 'white', color: 'black' }, padding:0.5, marginRight: 1, marginTop: 1 }}>
           <ChevronLeftIcon />
         </IconButton>
         <Box sx={{display: 'flex',  }}>
           <Image
               src="/Velocity-ALogo2.png"
               alt="Velocity Logo"
-              width={180}
-              height={40}
-              style={{ objectFit: 'contain' }}
+              width={190}
+              height={60}
+              style={{ objectFit: 'contain' , maxHeight: '60px', maxWidth: '160px', marginRight: '10px' , marginTop:'0px', padding: '0em'}}
               priority
           />
         </Box>
@@ -93,10 +93,10 @@ export default function DashboardLayout({ children }) {
           onClick={toggleDrawer}
           sx={{
             position: 'fixed',
-            top: 10,
+            top: 15,
             left: 0,
-            zIndex: 1300,
-            backgroundColor: '#100F33',
+            zIndex: 1200,
+            backgroundColor: '#00a1f7   ',
             borderRadius: '0 4px 4px 0',
             color: 'white',
           }}
@@ -109,14 +109,22 @@ export default function DashboardLayout({ children }) {
       <Drawer
         variant="persistent"
         open={open}
+        anchor="left"
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          display: open ? 'block' : 'none', // 👈 hide the drawer entirely when closed
+          display: open ? 'block' : 'none', 
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: 'border-box',
-            backgroundColor: '#100F33',
+            backgroundColor: '#4ebcf7',
+            color: 'white',
+            borderRight: 'none',
+            borderTopRightRadius: '5px',
+            borderBottomRightRadius: '5px',
+            boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+            transition: 'width 0.3s ease',
+            zIndex: 1200,
           },
         }}
       >
@@ -129,7 +137,7 @@ export default function DashboardLayout({ children }) {
         sx={{
           flexGrow: 1,
           bgcolor: 'background.default',
-          ml: open ? `5%` : '0%', // ← only if you're toggling
+          ml: open ? `5%` : '0%', // 
           transition: 'margin 0.3s ease',
           width: open ? `calc(100% - ${drawerWidth}px)` : '100%'
         }}

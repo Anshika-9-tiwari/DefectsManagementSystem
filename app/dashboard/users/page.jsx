@@ -62,8 +62,8 @@ export default function Users() {
     };
 
     return (
-        <Box sx={{ width: '100%', height: '100%', padding: '2%' }}>
-            <Stack spacing={4} sx={{marginLeft: '5%',}}>
+        <Box sx={{ width: '96%', height: '90%', padding: '2%' ,bgcolor: "#f9fafb", margin:'2%', borderRadius: '10px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+            <Stack spacing={3} sx={{marginLeft: '1%',}}>
                 <Stack direction={'row'} alignItems="center" spacing={2}>
                     <GroupIcon fontSize="large" />
                     <Typography variant="h4">Users</Typography>
@@ -86,6 +86,7 @@ export default function Users() {
                     <Button variant="contained" color="primary" onClick={() => setModalOpen(true)} sx={{
                         textTransform: 'none',
                         borderRadius: '10px',
+                        gap: 1,
                         '&:hover': {
                             backgroundColor: '#28D7EB',
                         },
@@ -94,7 +95,7 @@ export default function Users() {
                         <Typography variant="body2">Add</Typography>
                     </Button>
                 </Stack>
-                <TableContainer sx={{ width: '100%' }}>
+                <TableContainer sx={{ width: '100%', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
                     <Table size="small">
                         <TableHead>
                             <TableRow>

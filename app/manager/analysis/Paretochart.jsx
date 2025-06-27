@@ -8,7 +8,7 @@ import CanvasJSReact from '@canvasjs/react-charts';
 const ParetoChart = ({ title, dataPoints}) => {
 
   if (!Array.isArray(dataPoints) || dataPoints.length === 0) {
-    return <p>No data available for chart.</p>;
+    return <p className=" text-gray-400">No data available for chart.</p>;
   }
 
   const getCumulativeLine = (points) => {

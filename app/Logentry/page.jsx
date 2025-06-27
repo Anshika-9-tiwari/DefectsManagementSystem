@@ -33,14 +33,14 @@ export default function Home() {
             try {
                 const res = await fetch('/api/dashboard/parts');
                 const data = await res.json();
-                console.log('Fetched parts data:', data); // Log the response
+                console.log('Fetched parts data:', data); 
 
                 // Ensure data is an array
                 if (Array.isArray(data)) {
-                    setParts(data); // store fetched parts
+                    setParts(data); 
                 } else {
                     console.error('Fetched data is not an array:', data);
-                    setParts([]); // Reset to an empty array if not valid
+                    setParts([]); 
                 }
             } catch (err) {
                 console.error('Failed to fetch parts', err);

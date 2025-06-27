@@ -36,11 +36,14 @@ export async function POST(req) {
       const approved = userEntries.filter(e => e.defectstatus.toLowerCase() === 'ok').length;
       const rejected = userEntries.length - approved;
 
+      const uniquePartNumbers = [...new Set(userEntries.map(e => e.partnumber))];
+
       return {
         username: user.username,
         total: userEntries.length,
         approved,
         rejected,
+        partnumbers: uniquePartNumbers,
       };
     });
 
@@ -48,7 +51,7 @@ export async function POST(req) {
       totalChecked,
       totalApproved,
       totalRejected,
-      operators: operatorSummary
+      operators: operatorSummary,
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },

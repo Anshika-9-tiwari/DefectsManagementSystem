@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const users = await prisma.users.findMany({
       where: { role: 'user' },
-      select: { username: true },
+      select: {  username: true },
     });
 
     return NextResponse.json(users);

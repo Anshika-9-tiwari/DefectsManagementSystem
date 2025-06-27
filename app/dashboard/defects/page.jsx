@@ -39,19 +39,21 @@ export default function Defects() {
     }, []);
 
     return (
-        <Box marginLeft={'3%'} marginRight={'3%'} marginTop={'2%'}>
-            <Stack direction={'column'} spacing={2} width={'100%'} alignItems={'flex-start'}>
+        <Box marginLeft={'5%'} marginRight={'3%'} marginTop={'2%'} padding={'2%'} sx={{ width: '96%', height: '95%',bgcolor: "#f9fafb", margin:'2%', borderRadius: '10px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'}}>
+            <Stack direction={'column'} spacing={3} width={'100%'} alignItems={'flex-start'}>
                 <Typography variant='h5' display="flex" alignItems="center">
                     <ReportIcon sx={{ marginRight: 1 }} /> Defects
                 </Typography>
                 <Button
                     onClick={() => setOpenModal(true)}
-                    variant="outlined"
+                   variant="contained" color="primary"
                     sx={{
                         textTransform: 'none',
-                        border: '1px solid black',
                         borderRadius: '10px',
                         padding: isSmallScreen ? '6px 12px' : '8px 16px',
+                        '&:hover': {
+                            backgroundColor: '#28D7EB',
+                        },
                     }}
                 >
                     <Stack direction={'row'} spacing={1} alignItems="center">
@@ -60,7 +62,7 @@ export default function Defects() {
                     </Stack>
                 </Button>
 
-                <TableContainer sx={{ width: '100%', overflowX: 'auto' }}>
+                <TableContainer sx={{ width: '100%', overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
                     <Table size='small' sx={{
                         minWidth: isSmallScreen ? '400px' : '600px',
                         '& .MuiTableCell-root': {
@@ -92,7 +94,7 @@ export default function Defects() {
                                             sx={{
                                                 textTransform: 'none',
                                                 color: 'red',
-                                                boxShadow:'1',
+                                                boxShadow:'0 1px 3px rgba(0, 0, 0, 0.1)',
                                                 '&:hover': {
                                                     color: '#28D7EB',
                                                     backgroundColor: 'transparent',

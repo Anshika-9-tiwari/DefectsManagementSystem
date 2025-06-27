@@ -3,7 +3,6 @@
 import {
   Stack,
   Box,
-  InputLabel,
   Typography,
   TableContainer,
   Table,
@@ -13,11 +12,11 @@ import {
   TableRow,
   Button,
   TextField,
-  Select,
-  MenuItem,
+  Autocomplete,
+  Paper,
   IconButton,
-  useMediaQuery
-} from "@mui/material"
+  useMediaQuery,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import EditIcon from '@mui/icons-material/Edit';
@@ -25,28 +24,40 @@ import EditIcon from '@mui/icons-material/Edit';
 export default function OperatorEntries() {
   const [fromdate, setfrom] = useState('');
   const [todate, setto] = useState('');
-  const [partnum, setpartnum] = useState('');
-  const [parts, setparts] = useState([]);
+  const [selectedPart, setSelectedPart] = useState(null);
+  const [parts, setParts] = useState([]);
   const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const router = useRouter();
-  const isMobile = useMediaQuery('(max-width:600px)'); // Check if the screen is mobile size
+  const isMobile = useMediaQuery('(max-width:600px)');
 
+  // Fetch parts data on component mount
   useEffect(() => {
-    const fetchparts = async () => {
+    const fetchParts = async () => {
       try {
         const res = await fetch('/api/dashboard/parts');
         const data = await res.json();
-        const partsss = data.map(p => p.assyPartNo);
-        setparts(partsss);
+        setParts(data); // Array of { id, assyPartNo } objects
       } catch (error) {
         console.error('Failed to fetch parts:', error);
+        setError('Failed to load parts data');
       }
     };
 
-    fetchparts();
+    fetchParts();
   }, []);
 
+  // Fetch operator entries when filters change
   const fetchOperatorEntries = async () => {
+    if (!selectedPart?.assyPartNo || !fromdate || !todate) {
+      setError('Please select a part number and date range');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
     try {
       const res = await fetch('/api/supervisor/operator-entries', {
         method: 'POST',
@@ -54,22 +65,31 @@ export default function OperatorEntries() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          partnumber: partnum,
+          partnumber: selectedPart.assyPartNo,
           from: fromdate,
           to: todate,
         }),
       });
 
+      if (!res.ok) {
+        throw new Error('Failed to fetch entries');
+      }
+
       const data = await res.json();
       setEntries(data);
     } catch (err) {
-      console.error('Failed to fetch operator entries:', err);
+      console.error('Error fetching entries:', err);
+      setError(err.message || 'Failed to load entries');
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Delete an entry
   const handleDelete = async (id) => {
     const confirmed = window.confirm("Are you sure you want to remove this entry?");
     if (!confirmed) return;
+
     try {
       const res = await fetch('/api/supervisor/delete-entry', {
         method: 'POST',
@@ -81,114 +101,187 @@ export default function OperatorEntries() {
 
       if (res.ok) {
         setEntries(prev => prev.filter(entry => entry.id !== id));
-        alert('Deleted successfully');
+        alert('Entry deleted successfully');
       } else {
-        alert('Failed to delete');
+        throw new Error('Failed to delete entry');
       }
     } catch (err) {
       console.error('Error deleting entry:', err);
+      alert(err.message || 'Failed to delete entry');
     }
   };
 
   return (
-    <Box width={'90%'} flex={1} justifyContent={'center'} sx={{ marginTop: '2em', marginLeft:'2em', padding: { xs: 2, sm: 5 }}}>
-      <Stack direction={'column'} width={'100%'} spacing={5}>
+    <Box sx={{ 
+      width: '95%', 
+      margin: { xs: '0.5em auto', sm: '2em auto' },
+      padding: { xs: 2, sm: 5 }
+    }}>
+      <Stack spacing={3}>
         <Typography variant="h4">Operator Entries</Typography>
-        <Stack direction={'column'} spacing={2} sx={{ backgroundColor: '#100F33', padding: 2, borderRadius: '8px' }}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
-            <InputLabel sx={{ color: 'white' }}>Select part number</InputLabel>
-            <Select
-              size="small"
-              value={partnum}
-              onChange={(e) => setpartnum(e.target.value)}
-              sx={{
-                backgroundColor: '#100F33',
-                color: 'white',
-                border: '1px solid grey',
-                minWidth: '150px',
-                '& .MuiSvgIcon-root': { color: 'white' },
+
+        {/* Filter Section */}
+        <Paper elevation={3} sx={{ 
+          backgroundColor: '#ceecfb', 
+          padding: 2, 
+          borderRadius: '8px' 
+        }}>
+          <Stack 
+            direction={{ xs: 'column', sm: 'row' }} 
+            spacing={2}
+            alignItems="center"
+          >
+            {/* Searchable Part Number Dropdown */}
+            <Autocomplete
+              options={parts}
+              getOptionLabel={(option) => option.assyPartNo}
+              isOptionEqualToValue={(option, value) => 
+                option.assyPartNo === value?.assyPartNo
+              }
+              onChange={(event, newValue) => {
+                setSelectedPart(newValue);
               }}
-            >
-              <MenuItem value="All">All</MenuItem>
-              {parts.map((p, index) => (<MenuItem key={index} value={p}>{p}</MenuItem>))}
-            </Select>
+              value={selectedPart}
+              filterOptions={(options, state) => {
+                if (!state.inputValue) return options;
+                return options.filter(option =>
+                  option.assyPartNo.toLowerCase()
+                    .includes(state.inputValue.toLowerCase())
+                );
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Part Number"
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    width: isMobile ? '100%' : 250,
+                    backgroundColor: '#fff',
+                    boxShadow: 3,
+                  }}
+                  placeholder="Search parts..."
+                />
+              )}
+              noOptionsText="No parts found"
+              fullWidth
+            />
+
+            {/* Date Filters */}
             <TextField
-              label="From"
+              label="From Date"
               type="date"
               size="small"
               InputLabelProps={{ shrink: true }}
               value={fromdate}
               onChange={(e) => setfrom(e.target.value)}
               sx={{
-                backgroundColor: '#100F33',
-                '& input': {
-                  color: 'white',
-                  '&::-webkit-calendar-picker-indicator': {
-                    filter: 'invert(1)',
-                  },
-                },
-                '& label': {
-                  color: 'white',
-                },
+                width: isMobile ? '100%' : 'auto',
+                backgroundColor: '#fff',
+                boxShadow: 3,
               }}
             />
+
             <TextField
-              label="To"
+              label="To Date"
               type="date"
               size="small"
               InputLabelProps={{ shrink: true }}
               value={todate}
               onChange={(e) => setto(e.target.value)}
               sx={{
-                backgroundColor: '#100F33',
-                '& input': {
-                  color: 'white',
-                  '&::-webkit-calendar-picker-indicator': {
-                    filter: 'invert(1)',
-                  },
-                },
-                '& label': {
-                  color: 'white',
-                },
+                width: isMobile ? '100%' : 'auto',
+                backgroundColor: '#fff',
+                boxShadow: 3,
               }}
             />
-            <Button variant="contained" color="primary" size="small" onClick={fetchOperatorEntries} sx={{ textTransform: 'none' }}>
-              Submit
+
+            {/* Submit Button */}
+            <Button 
+              variant="contained" 
+              color="primary" 
+              size="medium"
+              onClick={fetchOperatorEntries}
+              disabled={loading}
+              sx={{ 
+                flexShrink: 0,
+                textTransform: 'none', 
+                backgroundColor: '#69e593',
+                '&:hover': { backgroundColor: '#4caf50' },
+                boxShadow: 3,
+              }}
+            >
+              {loading ? 'Loading...' : 'Search'}
             </Button>
           </Stack>
-        </Stack>
-        <TableContainer sx={{ maxHeight: isMobile ? '400px' : '600px', overflowY: 'auto',  borderRadius: '8px', boxShadow: 3 }}>
-          <Table size="small">
+        </Paper>
+
+        {/* Error Message */}
+        {error && (
+          <Typography color="error" sx={{ textAlign: 'center' }}>
+            {error}
+          </Typography>
+        )}
+
+        {/* Results Table */}
+        <TableContainer component={Paper} sx={{ 
+          maxHeight: '65vh', 
+          overflow: 'auto', 
+          borderRadius: '8px', 
+          boxShadow: 3 
+        }}>
+          <Table size="small" stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: 'grey' }}><strong>Part Number</strong></TableCell>
-                <TableCell sx={{ color: 'grey' }}><strong>Checker Name</strong></TableCell>
-                <TableCell sx={{ color: 'grey' }}><strong>Verifier Name</strong></TableCell>
-                <TableCell sx={{ color: 'grey' }}><strong>Defect</strong></TableCell>
-                <TableCell sx={{ color: 'grey' }}><strong>Date-Time</strong></TableCell>
-                <TableCell></TableCell>
+                <TableCell><strong>Part Number</strong></TableCell>
+                <TableCell><strong>Checker</strong></TableCell>
+                <TableCell><strong>Verifier</strong></TableCell>
+                <TableCell><strong>Defects</strong></TableCell>
+                <TableCell><strong>Date-Time</strong></TableCell>
+                <TableCell><strong>Actions</strong></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {entries.map((entry) => (
-                <TableRow key={entry.id}>
-                  <TableCell>{entry.partnumber}</TableCell>
-                  <TableCell>{entry.checkername}</TableCell>
-                  <TableCell>{entry.verifiername}</TableCell>
-                  <TableCell>{entry.defect.join(', ')}</TableCell>
-                  <TableCell>{new Date(entry.datetime).toLocaleString()}</TableCell>
-                  <TableCell>
-                    <Button color="error" size="small" onClick={() => handleDelete(entry.id)}>Remove</Button>
-                    <IconButton onClick={() => { router.push(`/supervisor/edit-defect?id=${entry.id}&verifiername=${entry.verifiername}&checkername=${entry.checkername}&partnumber=${entry.partnumber}`); }}>
-                      <EditIcon />
-                    </IconButton>
+              {entries.length > 0 ? (
+                entries.map((entry) => (
+                  <TableRow key={entry.id} hover>
+                    <TableCell>{entry.partnumber}</TableCell>
+                    <TableCell>{entry.checkername}</TableCell>
+                    <TableCell>{entry.verifiername}</TableCell>
+                    <TableCell>{entry.defect?.join(', ') || 'None'}</TableCell>
+                    <TableCell>
+                      {new Date(entry.datetime).toLocaleString()}
+                    </TableCell>
+                    <TableCell>
+                      <Button 
+                        color="error" 
+                        size="small" 
+                        onClick={() => handleDelete(entry.id)}
+                        sx={{ mr: 1 }}
+                      >
+                        Remove
+                      </Button>
+                      <IconButton 
+                        onClick={() => router.push(
+                          `/supervisor/edit-defect?id=${entry.id}&verifiername=${entry.verifiername}&checkername=${entry.checkername}&partnumber=${entry.partnumber}`
+                        )}
+                      >
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
+                    {loading ? 'Loading data...' : 'No entries found'}
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </Stack>
     </Box>
-  )
+  );
 }

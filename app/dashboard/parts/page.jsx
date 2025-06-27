@@ -25,8 +25,8 @@ export default function Parts() {
   const theme = useTheme();
 
   // Responsive breakpoints for layout direction and typography adjustments
-  const isXs = useMediaQuery(theme.breakpoints.down("sm")); // <600px
-  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md")); // 600-900px
+  const isXs = useMediaQuery(theme.breakpoints.down("sm")); 
+  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md")); 
 
   useEffect(() => {
     const fetchParts = async () => {
@@ -76,12 +76,14 @@ export default function Parts() {
         padding: 2,
         bgcolor: "#f9fafb",
         borderRadius: 2,
+        width: "96%",
+        height: "90%",
         minHeight: "80vh",
         display: "flex",
         flexDirection: "column",
       }}
     >
-      <Stack spacing={3}>
+      <Stack spacing={4} sx={{ margin:'1em 2em', width: "100%", flexGrow: 1 }}>
         {/* Header + Icon */}
         <Stack
           direction="row"
@@ -138,7 +140,7 @@ export default function Parts() {
         {/* Table Section*/}
         <TableContainer
           sx={{
-            maxWidth: "100%",
+            maxWidth: "95%",
             overflowX: "auto",
             borderRadius: 2,
             boxShadow:
@@ -149,7 +151,7 @@ export default function Parts() {
           <Table
             size={isXs ? "small" : "medium"}
             sx={{
-              minWidth: 1200, // min width to allow horizontal scroll on small devices
+              minWidth: 1200, 
               "& .MuiTableCell-root": {
                 whiteSpace: "nowrap",
                 textOverflow: "ellipsis",
@@ -162,11 +164,24 @@ export default function Parts() {
             }}
             aria-label="Parts data table"
           >
-            <TableHead>
+            <TableHead >
               <TableRow
                 sx={{
                   bgcolor: theme.palette.grey[100],
                   borderBottom: `2px solid ${theme.palette.divider}`,
+                  "& th": {
+                    fontWeight: 600,
+                    color: theme.palette.text.primary,
+                    fontSize: isXs ? 12 : 14,
+                    px: isXs ? 0.5 : 1.5,
+                  },
+                  "& th:first-of-type": {
+                    width: 100,
+                    minWidth: 100,
+                  },
+                  "& th:not(:first-of-type)": {
+                    minWidth: 120,
+                  },
                 }}
               >
                 <TableCell/>

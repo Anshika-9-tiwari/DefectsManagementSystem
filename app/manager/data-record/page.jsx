@@ -137,38 +137,33 @@ export default function EntrySummary() {
 
   return (
     <Box sx={{ 
-      margin: { xs: '16px', md: '24px' },
-      padding: { xs: '16px', md: '24px' }
+      margin: { xs: '15px', md: '25px' },
+      padding: { xs: '15px', md: '20px' },
+      backgroundColor:'#f5fbff',
+      borderRadius: '10px',
+      boxShadow: 3,
     }}>
-      <Stack spacing={4}>
-        <Typography variant='h4' sx={{ 
-          mb: 3,
-          pl: { xs: 1, sm: 0 }
-        }}>
-          Entry Summary
-        </Typography>
-        
+      <Stack spacing={3}>
         <Paper sx={{ 
           padding: { xs: '16px', sm: '20px' },
-          backgroundColor: '#100F33',
+          backgroundColor: '#ceecfb',
           borderRadius: '8px'
         }}>
-          <Grid container spacing={15} alignItems="center">
-            <Grid item xs={12} sm={6}>
+          <Grid container spacing={3} alignItems="center">
+            <Grid item xs={12} sm={6} md={4}>
               <Typography variant="caption" sx={{ 
-                color: 'white',
+                color: 'black',
                 display: 'block',
-                fontSize: { xs: '0.875rem', sm: '1rem' },
+                fontSize: { xs: '0.875rem', sm: '1.2rem' },
                 marginLeft: { xs: 0, sm: '8px' },
                 mb: { xs: 1, sm: 0 }
               }}>
-                <strong>Entry summary</strong>
+                <strong>Entry Summary</strong>
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={6} container spacing={15} justifyContent="flex-end ">
-              <Grid item xs={6} sm="auto">
+            <Grid item xs={12} sm={6} container spacing={2} justifyContent="flex-end">
+              <Grid item xs={12} sm="auto">
                 <TextField
-                  fullWidth
                   label="From"
                   type="date"
                   size="small"
@@ -176,23 +171,19 @@ export default function EntrySummary() {
                   onChange={(e) => setFromDate(e.target.value)}
                   InputLabelProps={{ shrink: true }}
                   sx={{
-                    backgroundColor: '#100F33',
+                    backgroundColor: '#fff',
+                    boxShadow: 3,
                     '& input': {
-                      color: 'white',
-                      padding: { xs: '12px 8px', sm: '8px' },
-                      '&::-webkit-calendar-picker-indicator': {
-                        filter: 'invert(1)',
-                      },
+                      color: 'black',
                     },
                     '& label': {
-                      color: 'white',
+                      color: 'black',
                     },
                   }}
                 />
               </Grid>
-              <Grid item xs={6} sm="auto">
+              <Grid item xs={12} sm="auto">
                 <TextField
-                  fullWidth
                   label="To"
                   type="date"
                   size="small"
@@ -200,38 +191,38 @@ export default function EntrySummary() {
                   onChange={(e) => setToDate(e.target.value)}
                   InputLabelProps={{ shrink: true }}
                   sx={{
-                    backgroundColor: '#100F33',
+                    backgroundColor: '#fff',
+                    boxShadow: 3,
                     '& input': {
-                      color: 'white',
-                      padding: { xs: '12px 8px', sm: '8px' },
-                      '&::-webkit-calendar-picker-indicator': {
-                        filter: 'invert(1)',
-                      },
+                      color: 'black',
                     },
                     '& label': {
-                      color: 'white',
+                      color: 'black',
                     },
                   }}
                 />
               </Grid>
-              <Grid item xs={6} sm="auto">
+              <Grid item xs={12} sm="auto">
                 <Button 
-                  fullWidth
-                  variant="contained" 
-                  color="primary" 
+                  variant="outlined" 
                   size="medium" 
                   onClick={handleSubmit} 
                   sx={{ 
                     textTransform: 'none',
-                    py: { xs: 1, sm: 0.5 }
+                    bgcolor: '#2a8f4b',
+                    boxShadow: 3,
+                    borderColor: 'white',
+                    color: 'white',
+                    '&:hover': {
+                      bgcolor: '#2a8f4b',
+                    },
                   }}
                 >
                   Submit
                 </Button>
               </Grid>
-              <Grid item xs={6} sm="auto">
+              <Grid item xs={12} sm="auto">
                 <Button
-                  fullWidth
                   variant="outlined"
                   size="medium"
                   onClick={downloadExcel}
@@ -239,10 +230,12 @@ export default function EntrySummary() {
                     backgroundColor: 'green',
                     borderColor: 'white',
                     textTransform: 'none',
-                    py: { xs: 1, sm: 0.5 }
+                    color: 'white',
                   }}
                   startIcon={<Icon path={mdiMicrosoftExcel} size={1} color={'white'} />}
-                />
+                >
+                  Download Excel
+                </Button>
               </Grid>
             </Grid>
           </Grid>
@@ -266,6 +259,7 @@ export default function EntrySummary() {
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
+              borderRadius: '1px',
             }
           }}>
             <TableHead sx={{ backgroundColor: '#f5f5f5' }}>

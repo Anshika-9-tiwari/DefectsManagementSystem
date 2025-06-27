@@ -9,7 +9,7 @@ export default function ButtonAppBar() {
     const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
 
     return (
-        <AppBar position="sticky" style={{ backgroundColor: '#fff', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.3)' }}>
+        <AppBar position="sticky" style={{ backgroundColor: '#fff', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.3)',borderBottomRightRadius: '10px' }}>
             <Toolbar>
                 {/* Optional: Mobile Menu Icon */}
                 {isMobile && (
@@ -28,9 +28,9 @@ export default function ButtonAppBar() {
                     <Image
                         src="/Velocity-ALogo2.png"
                         alt="Velocity Logo"
-                        width={180}
+                        width={190}
                         height={40}
-                        style={{ objectFit: 'contain' }}
+                        style={{ objectFit: 'contain', padding: '0.6em' }}
                         priority
                     />
                 </Box>
@@ -40,7 +40,7 @@ export default function ButtonAppBar() {
                     color="primary"
                     variant="contained"
                     onClick={() => signOut({ callbackUrl: '/Login' })}
-                    sx={{ backgroundColor: '#100F33', color: 'white', borderRadius: '8px' }}
+                    sx={{ backgroundColor: '#4ebcf7 ', color: 'white', borderRadius: '5px' }}
                 >
                     Logout
                 </Button>

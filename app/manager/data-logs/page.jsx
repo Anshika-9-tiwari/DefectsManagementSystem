@@ -1,12 +1,12 @@
 'use client'
 
-import { Box, Stack, Typography, Button, TextField, MenuItem, TableContainer, Select, TableHead, TableRow, TableCell, TableBody, Table, Paper, InputLabel, Pagination, useMediaQuery } from '@mui/material';
+import { Box, Stack, Typography, Button, TextField, TableContainer, TableHead, TableRow, TableCell, TableBody, Table, Paper, InputLabel, Pagination, useMediaQuery, Autocomplete } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 export default function Datalogspage() {
   const [data, setData] = useState([]);
-  const [partFilter, setPartFilter] = useState('All');
-  const [defectFilter, setDefectFilter] = useState('All');
+  const [partFilter, setPartFilter] = useState(null);
+  const [defectFilter, setDefectFilter] = useState(null);
   const [parts, setParts] = useState([]); 
   const [defects, setDefects] = useState([]);
   const [fromDate, setFromDate] = useState('');
@@ -61,31 +61,29 @@ export default function Datalogspage() {
     }
   };
 
-     const fetchFilters = async () => {
-  try {
-    const partRes = await fetch('/api/dashboard/parts');
-    const partsData = await partRes.json();
-    console.log('Parts Data:', partsData); // Log the response
+  const fetchFilters = async () => {
+    try {
+      const partRes = await fetch('/api/dashboard/parts');
+      const partsData = await partRes.json();
+      console.log('Parts Data:', partsData); // Log the response
 
-    // Ensure partsData is an array
-    if (Array.isArray(partsData)) {
-      setParts(partsData);
-    } else {
-      console.error('Expected partsData to be an array, but got:', partsData);
-      setParts([]); // Set to empty array if not an array
+      // Ensure partsData is an array
+      if (Array.isArray(partsData)) {
+        setParts(partsData);
+      } else {
+        console.error('Expected partsData to be an array, but got:', partsData);
+        setParts([]); // Set to empty array if not an array
+      }
+
+      const defectRes = await fetch('/api/dashboard/defects');
+      const defectData = await defectRes.json();
+      setDefects(defectData || []);
+    } catch (err) {
+      console.error('Error fetching filters:', err);
+      setParts([]); // Set to empty array on error
+      setDefects([]); // Set to empty array on error
     }
-
-    const defectRes = await fetch('/api/dashboard/defects');
-    const defectData = await defectRes.json();
-    setDefects(defectData || []);
-  } catch (err) {
-    console.error('Error fetching filters:', err);
-    setParts([]); // Set to empty array on error
-    setDefects([]); // Set to empty array on error
-  }
-};
-
-   
+  };
 
   useEffect(() => {
     fetchFilters();
@@ -101,57 +99,81 @@ export default function Datalogspage() {
   };
 
   return (
-    <Box width={'100%'} sx={{ marginTop: '2em',  margin: { xs: '16px', md: '10px' }, padding: { xs: '16px', md: '24px' } }}>
-      <Stack direction={'column'} width={'100%'} spacing={4}>
+    <Box sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        minHeight: '90vh',
+        width: '95vw',
+        maxWidth: '1800px',
+        margin: '0 auto',
+        padding: { xs: 2, sm: 3 },
+      }}>
+      <Stack direction={'column'} sx={{ width: '100%' }} spacing={3}>
         <Typography variant="h4" sx={{ mb: 2 }}>Data Logs</Typography>
         
-        <Paper sx={{ padding: { xs: '16px', sm: '20px' }, backgroundColor: '#100F33', boxShadow: 5 , borderRadius: '8px' }}>
+        <Paper sx={{ padding: { xs: '16px', sm: '20px' }, backgroundColor: '#ceecfb', boxShadow: 3, borderRadius: '8px' }}>
           <Stack direction={isMobile ? 'column' : 'row'} spacing={2} alignItems={isMobile ? 'flex-start' : 'center'}>
-            <Stack direction={isMobile ? 'column' : 'row'} spacing={10} flexGrow={1}>
-              <Stack direction="column" spacing={1}>
-                <InputLabel sx={{ color: 'white', fontSize: '0.875rem' }}>Sort by Part</InputLabel>
-                <Select
-                  size='small'
-                  value={partFilter}
-                  onChange={(e) => setPartFilter(e.target.value)}
-                  sx={{
-                    backgroundColor: '#100F33',
-                    color: 'white',
-                    border: '1px solid grey',
-                    minWidth: '150px',
-                    '& .MuiSvgIcon-root': { color: 'white' },
+            <Stack direction={isMobile ? 'column' : 'row'} spacing={2} flexGrow={1}>
+             
+              {/* Part Filter */}
+              <Stack direction="column" spacing={0.5} flexGrow={1}>
+                <InputLabel sx={{ color: 'black', fontSize: '0.876rem' }}>Sort by Part</InputLabel>
+                <Autocomplete
+                  options={parts}
+                  getOptionLabel={(option) => option.assyPartNo}
+                  onChange={(event, newValue) => setPartFilter(newValue ? newValue.assyPartNo : null)}
+                  filterOptions={(options, state) => {
+                    const displayOptions = options.filter(option => 
+                      option.assyPartNo.toLowerCase().includes(state.inputValue.toLowerCase())
+                    );
+                    return displayOptions;
                   }}
-                >
-                  <MenuItem value="All">All</MenuItem>
-                  {parts.map((part) => (
-                    <MenuItem key={part.id} value={part.assyPartNo}>{part.assyPartNo}</MenuItem>
-                  ))}
-                </Select>
+                  renderInput={(params) => (
+                    <TextField 
+                      fullWidth
+                      {...params} 
+                      label="Select Part" 
+                      variant="outlined" 
+                      sx={{ backgroundColor: '#fff', boxShadow: 3 }}
+                      size="small"
+                      placeholder="Type to search parts..."
+                    />
+                  )}
+                  clearOnBlur={false}
+                />
               </Stack>
 
-              <Stack direction="column" spacing={1}>
-                <InputLabel sx={{ color: 'white', fontSize: '0.875rem' }}>Sort by Defect</InputLabel>
-                <Select
-                  size='small'
-                  value={defectFilter}
-                  onChange={(e) => setDefectFilter(e.target.value)}
-                  sx={{
-                    backgroundColor: '#100F33',
-                    color: 'white',
-                    border: '1px solid grey',
-                    minWidth: '150px',
-                    '& .MuiSvgIcon-root': { color: 'white' },
+              {/* Defect Filter */}
+              <Stack direction="column" spacing={0.5} flexGrow={1}>
+                <InputLabel sx={{ color: 'black', fontSize: '0.876rem' }}>Sort by Defect</InputLabel>
+                <Autocomplete
+                  options={defects}
+                  getOptionLabel={(option) => option.defect}
+                  onChange={(event, newValue) => setDefectFilter(newValue ? newValue.defect : null)}
+                  filterOptions={(options, state) => {
+                    const displayOptions = options.filter(option => 
+                      option.defect.toLowerCase().includes(state.inputValue.toLowerCase())
+                    );
+                    return displayOptions;
                   }}
-                >
-                  <MenuItem value="All">All</MenuItem>
-                  {defects.map((defect) => (
-                    <MenuItem key={defect.id} value={defect.defect}>{defect.defect}</MenuItem>
-                  ))}
-                </Select>
+                  renderInput={(params) => (
+                    <TextField 
+                      fullWidth
+                      {...params} 
+                      label="Select Defect" 
+                      variant="outlined" 
+                      sx={{ backgroundColor: '#fff', boxShadow: 3 }}
+                      size="small"
+                      placeholder="Type to search defects..."
+                    />
+                  )}
+                  clearOnBlur={false}
+                />
               </Stack>
 
-              <Stack direction="column" spacing={1}>
-                <InputLabel sx={{ color: 'white', fontSize: '0.875rem' }}>From</InputLabel>
+              {/* Date Filters */}
+              <Stack direction="column" spacing={0.5} flexGrow={1}>
+                <InputLabel sx={{ color: 'black', fontSize: '0.876rem' }}>From</InputLabel>
                 <TextField
                   type="date"
                   size="small"
@@ -159,23 +181,20 @@ export default function Datalogspage() {
                   value={fromDate}
                   onChange={(e) => setFromDate(e.target.value)}
                   sx={{
-                    backgroundColor: '#100F33',
-                    border: '1px solid grey',
+                    backgroundColor: '#fff',
+                    boxShadow: '3',
                     '& input': {
-                      color: 'white',
-                      '&::-webkit-calendar-picker-indicator': {
-                        filter: 'invert(1)',
-                      },
+                      color: 'black',
                     },
                     '& label': {
-                      color: 'white',
+                      color: 'black',
                     },
                   }}
                 />
               </Stack>
 
-              <Stack direction="column" spacing={1}>
-                <InputLabel sx={{ color: 'white', fontSize: '0.875rem' }}>To</InputLabel>
+              <Stack direction="column" spacing={0.5} flexGrow={1}>
+                <InputLabel sx={{ color: 'black', fontSize: '0.876rem' }}>To</InputLabel>
                 <TextField
                   type="date"
                   size="small"
@@ -183,16 +202,14 @@ export default function Datalogspage() {
                   value={toDate}
                   onChange={(e) => setToDate(e.target.value)}
                   sx={{
-                    backgroundColor: '#100F33',
-                    border: '1px solid grey',
+                    backgroundColor: '#fff',
+                    boxShadow: '3',
+                    minWidth: '150px',
                     '& input': {
-                      color: 'white',
-                      '&::-webkit-calendar-picker-indicator': {
-                        filter: 'invert(1)',
-                      },
+                      color: 'black',
                     },
                     '& label': {
-                      color: 'white',
+                      color: 'black',
                     },
                   }}
                 />
@@ -201,12 +218,13 @@ export default function Datalogspage() {
 
             <Button 
               variant="contained" 
-              color="primary" 
+              color="success" 
               size="medium" 
               onClick={handleSubmit} 
               sx={{ 
                 textTransform: 'none',
                 mt: isMobile ? 2 : 0,
+                padding: '8px 15px',
                 alignSelf: isMobile ? 'flex-start' : 'center'
               }}
               disabled={loading}
