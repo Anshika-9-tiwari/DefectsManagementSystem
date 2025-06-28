@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
@@ -36,13 +33,13 @@ model entry {
 
 model Part {
   id                          Int     @id @default(autoincrement())
-  customer                   String
-  assyPartNo                 String
+  customer                  String
+  assyPartNo                String
   subAssyPartNo             String
   qualityPlanAvailable      String
-  idA                        String
+  idA                       String
   plugGaugeAvailableA       String
-  idB                        String
+  idB                       String
   plugGaugeAvailableB       String
   wallThicknessA            String
   wallThicknessB            String
